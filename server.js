@@ -118,6 +118,7 @@ for (let d = 1; d <= 25; d++) {
       });
     });
   });
+
   const partStats = [];
   for (let p = 1; p <= 2; p++) {
     // string part
@@ -176,6 +177,7 @@ fs.readFile(path.join(__dirname, 'views/stats.ntl'), function (err, content) {
     a.push(day);
     return a;
   }, []);
+
   const statHtml = jsStats.reduce((a, d, i) => {
     const key = 'day_' + (i + 1);
     const p1 = d[0];
