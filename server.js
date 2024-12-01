@@ -7,9 +7,9 @@ const timeout = require('connect-timeout');
 const rateLimit = require('express-rate-limit');
 const { JSHINT } = require('jshint');
 
-console.log(process.env.PROJECT_DOMAIN);
-const PROJECT_URL = `https://${process.env.PROJECT_DOMAIN}.glitch.me/`;
-console.log(PROJECT_URL);
+const isGlitch = !!process.env.PROJECT_DOMAIN;
+const projectDomain = process.env.PROJECT_DOMAIN || "localhost";
+console.log(projectDomain);
 
 // run the same functions on the front & back
 const f = require('./public/funs');
@@ -215,4 +215,6 @@ fs.readFile(path.join(__dirname, 'views/stats.ntl'), function (err, content) {
 // listen for requests :)
 const listener = app.listen(process.env.PORT, function () {
   console.log('This cool app is listening on port ' + listener.address().port);
+  const PROJECT_URL = isGlitch ? `https://${process.env.PROJECT_DOMAIN}.glitch.me/` : `http://localhost:${listener.address().port}/`;
+  console.log(PROJECT_URL);
 });
