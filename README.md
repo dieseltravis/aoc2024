@@ -8,7 +8,7 @@ also on github: [dieseltravis/aoc2024](https://github.com/dieseltravis/aoc2024)
 
 [![Days completed in a row](https://img.shields.io/badge/⭐%20days%20in%20a%20row-01-blueviolet)](https://adventofcode.com/2024/)
 
-[![Node.js CI](https://github.com/dieseltravis/aoc2024/actions/workflows/node.js.yml/badge.svg)](https://github.com/dieseltravis/aoc2024/actions/workflows/node.js.yml) [![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fdieseltravis%2Faoc2024.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fdieseltravis%2Faoc2024?ref=badge_shield) [![js-semistandard-style](https://img.shields.io/badge/code%20style-semistandard-brightgreen.svg?logo=javascript)](https://github.com/standard/semistandard)
+[![Node.js CI](https://github.com/dieseltravis/aoc2024/actions/workflows/node.js.yml/badge.svg)](https://github.com/dieseltravis/aoc2024/actions/workflows/node.js.yml) [![js-semistandard-style](https://img.shields.io/badge/code%20style-semistandard-brightgreen.svg?logo=javascript)](https://github.com/standard/semistandard)
 
 ## solutions:
 Install node 18.18.x, yarn, and then run `yarn install` and then `yarn start`.
