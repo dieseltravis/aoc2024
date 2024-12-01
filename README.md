@@ -2,7 +2,7 @@
 
 javascript 🎄 Advent of Code 2024
 
-my 2024 solutions on ~~glitch: [meowing-holy-carbon](https://meowing-holy-carbon.glitch.me/)~~ localhost (glitch doesn't work this year because the latest Express needs node 18+ and glitch only uses up to 16 ☹), all the code for the solutions are in [funs.js](https://github.com/dieseltravis/aoc2024/blob/main/public/funs.js).
+my 2024 solutions on ~~glitch: [meowing-holy-carbon](https://meowing-holy-carbon.glitch.me/)~~ `localhost` (glitch doesn't work this year because the latest Express needs node 18+ and glitch only uses up to 16 ☹), all the code for the solutions are in [funs.js](https://github.com/dieseltravis/aoc2024/blob/main/public/funs.js).
 
 also on github: [dieseltravis/aoc2024](https://github.com/dieseltravis/aoc2024)
 
@@ -11,7 +11,7 @@ also on github: [dieseltravis/aoc2024](https://github.com/dieseltravis/aoc2024)
 [![Node.js CI](https://github.com/dieseltravis/aoc2024/actions/workflows/node.js.yml/badge.svg)](https://github.com/dieseltravis/aoc2024/actions/workflows/node.js.yml) [![js-semistandard-style](https://img.shields.io/badge/code%20style-semistandard-brightgreen.svg?logo=javascript)](https://github.com/standard/semistandard)
 
 ## solutions:
-Install node 18.18.x, yarn, and then run `yarn install` and then `yarn start`.
+Install node `>18.18.x`, `yarn`, and then run `yarn install` and then `yarn start`.
 
 <!-- 
 1. [day one](https://meowing-holy-carbon.glitch.me/day/01)
