@@ -3,8 +3,8 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Travis's Advent of Code 2023 Stats</title>
-    <meta name="description" content="Travis's Advent of Code 2023 Stats">
+    <title>Travis's Advent of Code 2024 Stats</title>
+    <meta name="description" content="Travis's Advent of Code 2024 Stats">
     <meta name="theme-color" content="#373fff">
     <link rel="stylesheet" href="/style.css">
     <style type='text/css'>
@@ -22,7 +22,7 @@
         <a href="/" title="up">⬆</a> 
       </nav>
       <h1>
-        Travis's Advent of Code 2023 Stats
+        Travis's Advent of Code 2024 Stats
       </h1>
       <p>
         Character and line counts.

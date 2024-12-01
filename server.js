@@ -38,7 +38,7 @@ app.get('/', function (request, response) {
   response.sendFile(path.join(__dirname, 'views/index.html'));
 });
 
-const year = 2023;
+const year = 2024;
 const days = ['zero',
   'one', 'two', 'three', 'four', 'five',
   'six', 'seven', 'eight', 'nine', 'ten',
