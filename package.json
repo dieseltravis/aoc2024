@@ -1,0 +1,41 @@
+{
+  "name": "meowing-holy-carbon",
+  "version": "2024.12.01",
+  "description": "Travis's Advent of Code 2024",
+  "author": "Travis Hardiman",
+  "homepage": "https://meowing-holy-carbon.glitch.me/",
+  "main": "server.js",
+  "scripts": {
+    "test": "node --check server.js && semistandard && eslint server.js public/*.js",
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=18.0.0 || >=20.0.0 || >=22.0.0 || >=24.0.0"
+  },
+  "dependencies": {
+    "connect-timeout": "^1.9.0",
+    "eslint": "^9.16.0",
+    "express": "^5.0.1",
+    "express-rate-limit": "^7.4.1",
+    "semistandard": "^17.0.0",
+    "standard-engine": "^15.1.0",
+    "jshint": "^2.13.6"
+  },
+  "repository": {
+    "url": "https://glitch.com/edit/#!/meowing-holy-carbon"
+  },
+  "license": "Hippocratic-3.0",
+  "keywords": [
+    "glitch",
+    "adventofcode",
+    "advent",
+    "advent-of-code",
+    "advent-of-code-2024"
+  ],
+  "browserslist": [
+    "defaults",
+    "node > 14",
+    "fully supports es6-module",
+    "maintained node versions"
+  ]
+}
