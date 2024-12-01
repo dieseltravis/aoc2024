@@ -8,7 +8,7 @@ const rateLimit = require('express-rate-limit');
 const { JSHINT } = require('jshint');
 
 const isGlitch = !!process.env.PROJECT_DOMAIN;
-const projectDomain = process.env.PROJECT_DOMAIN || "localhost";
+const projectDomain = process.env.PROJECT_DOMAIN || 'localhost';
 console.log(projectDomain);
 
 // run the same functions on the front & back

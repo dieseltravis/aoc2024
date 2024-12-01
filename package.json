@@ -17,9 +17,9 @@
     "eslint": "^9.16.0",
     "express": "^5.0.1",
     "express-rate-limit": "^7.4.1",
+    "jshint": "^2.13.6",
     "semistandard": "^17.0.0",
-    "standard-engine": "^15.1.0",
-    "jshint": "^2.13.6"
+    "standard-engine": "^15.1.0"
   },
   "repository": {
     "url": "https://glitch.com/edit/#!/meowing-holy-carbon"
@@ -37,5 +37,10 @@
     "node > 14",
     "fully supports es6-module",
     "maintained node versions"
-  ]
+  ],
+  "devDependencies": {
+    "@eslint/eslintrc": "^3.2.0",
+    "@eslint/js": "^9.16.0",
+    "globals": "^15.13.0"
+  }
 }
