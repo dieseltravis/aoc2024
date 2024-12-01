@@ -24,7 +24,25 @@
         const sum = split.diff.reduce((acc, d) => acc + d, 0);
         return sum;
       },
-      part2: d => d
+      part2: (data) => {
+        const input = data.trim().split('\n').map(r => {
+          const pair = r.split('   ').map(Number);
+          return pair;
+        });
+        console.log(input);
+        const split = input.reduce((acc, pair) => {
+          acc.left.push(pair[0]);
+          acc.right.push(pair[1]);
+          return acc;
+        }, { left: [], right: [] });
+        split.scores = split.left.reduce((acc, lnum) => {
+          acc.push(lnum * split.right.filter((rnum) => rnum === lnum).length);
+          return acc;
+        }, []);
+        console.log(split);
+        const sum = split.scores.reduce((acc, d) => acc + d, 0);
+        return sum;
+      }
     },
     day2: {
       part1: d => d,
