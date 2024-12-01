@@ -123,9 +123,11 @@ footer {
   margin-top: 50px;
   padding-top: 25px;
   border-top: 1px solid lightgrey;
+  font-size: xx-small;
 }
 
 div.glitchButton {
+  display: none;
   position: fixed;
   top: 20px;
   right: 20px;

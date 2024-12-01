@@ -3,7 +3,27 @@
 
   const all = {
     day1: {
-      part1: d => d,
+      part1: (data) => {
+        const input = data.trim().split('\n').map(r => {
+          const pair = r.split('   ').map(Number);
+          return pair;
+        });
+        console.log(input);
+        const split = input.reduce((acc, pair) => {
+          acc.left.push(pair[0]);
+          acc.right.push(pair[1]);
+          return acc;
+        }, { left: [], right: [] });
+        split.left.sort((a, b) => a - b);
+        split.right.sort((a, b) => a - b);
+        split.diff = split.left.reduce((acc, num, i) => {
+          acc.push(Math.abs(num - split.right[i]));
+          return acc;
+        }, []);
+        console.log(split);
+        const sum = split.diff.reduce((acc, d) => acc + d, 0);
+        return sum;
+      },
       part2: d => d
     },
     day2: {
