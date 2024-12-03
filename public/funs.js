@@ -45,7 +45,35 @@
       }
     },
     day2: {
-      part1: d => d,
+      part1: (data) => {
+        const input = data.trim().split('\n').map(r => r.split(' ').map(Number)).reduce((acc, r) => {
+          let ascending = 0
+          let descending = 0
+          const max = r.reduce((diff, c, i) => {
+            if (i > 0) {
+              const fromPrev = r[i - 1] - c;
+              diff = Math.max(diff, Math.abs(fromPrev));
+              const ordering = fromPrev > 0 ? 1 : fromPrev < 0 ? -1 : 0;
+              if (ordering > 0) {
+                ascending++;
+              } else if (ordering < 0) {
+                descending++;
+              }
+            }
+            return diff;
+          }, 0);
+          acc.push({
+            row: r,
+            max,
+            allMoved: (r.length - 1 === ascending + descending),
+            isOrder: (ascending === 0 || descending === 0)
+          });
+          return acc;
+        }, []);
+        console.log(input);
+
+        return input.filter(r => r.max <= 3 && r.allMoved && r.isOrder).length;
+      },
       part2: d => d
     },
     day3: {
