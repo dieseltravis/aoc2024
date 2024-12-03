@@ -102,7 +102,7 @@
         console.log(input);
 
         const valid = input.filter(r => r.max <= 3 && r.allMoved && r.isOrder).length;
-        const second = input.filter(r => !(r.max <= 3 && r.allMoved && r.isOrder)).reduce((acc, r, ri) => {
+        const second = input.filter(r => !(r.max <= 3 && r.allMoved && r.isOrder)).reduce((acc, r) => {
           for (let l = r.row.length; l--;) {
             const index = l;
             const chance = r.row.filter((_, i) => i !== index);
