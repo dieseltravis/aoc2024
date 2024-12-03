@@ -47,8 +47,8 @@
     day2: {
       part1: (data) => {
         const input = data.trim().split('\n').map(r => r.split(' ').map(Number)).reduce((acc, r) => {
-          let ascending = 0
-          let descending = 0
+          let ascending = 0;
+          let descending = 0;
           const max = r.reduce((diff, c, i) => {
             if (i > 0) {
               const fromPrev = r[i - 1] - c;
@@ -74,7 +74,66 @@
 
         return input.filter(r => r.max <= 3 && r.allMoved && r.isOrder).length;
       },
-      part2: d => d
+      part2: (data) => {
+        const input = data.trim().split('\n').map(r => r.split(' ').map(Number)).reduce((acc, r) => {
+          let ascending = 0;
+          let descending = 0;
+          const max = r.reduce((diff, c, i) => {
+            if (i > 0) {
+              const fromPrev = r[i - 1] - c;
+              diff = Math.max(diff, Math.abs(fromPrev));
+              const ordering = fromPrev > 0 ? 1 : fromPrev < 0 ? -1 : 0;
+              if (ordering > 0) {
+                ascending++;
+              } else if (ordering < 0) {
+                descending++;
+              }
+            }
+            return diff;
+          }, 0);
+          acc.push({
+            row: r,
+            max,
+            allMoved: (r.length - 1 === ascending + descending),
+            isOrder: (ascending === 0 || descending === 0)
+          });
+          return acc;
+        }, []);
+        console.log(input);
+
+        const valid = input.filter(r => r.max <= 3 && r.allMoved && r.isOrder).length;
+        const second = input.filter(r => !(r.max <= 3 && r.allMoved && r.isOrder)).reduce((acc, r, ri) => {
+          for (let l = r.row.length; l--;) {
+            const index = l;
+            const chance = r.row.filter((_, i) => i !== index);
+            let ascending = 0;
+            let descending = 0;
+            for (let ll = chance.length; ll--;) {
+              if (ll > 0) {
+                const fromPrev = chance[ll - 1] - chance[ll];
+                if (Math.abs(fromPrev) <= 3) {
+                  const ordering = fromPrev > 0 ? 1 : fromPrev < 0 ? -1 : 0;
+                  if (ordering > 0) {
+                    ascending++;
+                  } else if (ordering < 0) {
+                    descending++;
+                  } else {
+                    break;
+                  }
+                }
+              }
+            }
+            if ((ascending === 0 || descending === 0) && (chance.length - 1 === ascending + descending)) {
+              acc++;
+              console.log(acc);
+              break;
+            }
+          }
+          return acc;
+        }, 0);
+
+        return valid + second;
+      }
     },
     day3: {
       part1: d => d,
