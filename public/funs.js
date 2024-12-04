@@ -136,8 +136,30 @@
       }
     },
     day3: {
-      part1: d => d,
-      part2: d => d
+      part1: (data) => {
+        const rxmul = /mul\((-?\d+),(-?\d+)\)/g;
+        const input = [...data.trim().matchAll(rxmul)];
+        console.log(input);
+        const sum = input.reduce((acc, r) => acc + r[1] * r[2], 0);
+        return sum;
+      },
+      part2: (data) => {
+        const rxmul = /mul\((-?\d+),(-?\d+)\)|(do)\(\)|(don't)\(\)/g;
+        const input = [...data.trim().matchAll(rxmul)];
+        console.log(input);
+        let yes = true;
+        const sum = input.reduce((acc, r) => {
+          if (r[3] === 'do') {
+            yes = true;
+          } else if (r[4] === 'don\'t') {
+            yes = false;
+          } else if (yes) {
+            acc += r[1] * r[2];
+          }
+          return acc;
+        }, 0);
+        return sum;
+      }
     },
     day4: {
       part1: d => d,
