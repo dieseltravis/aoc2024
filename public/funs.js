@@ -162,7 +162,79 @@
       }
     },
     day4: {
-      part1: d => d,
+      part1: (data) => {
+        const xmas = 'XMAS'.split('');
+        const len = xmas.length;
+        const input = data.trim().split('\n').map(r => r.split(''));
+        const ymax = input.length;
+        const xmax = input[0].length;
+        console.log(input, ymax, xmax);
+        let count = 0;
+        for (let y = ymax; y--;) {
+          const row = input[y];
+          for (let x = xmax; x--;) {
+            const c = row[x];
+            console.log(y, x, c);
+            if (c === xmas[0]) {
+              const up = (y >= len - 1);
+              const down = (y + len - 1 < ymax);
+              const left = (x >= len - 1);
+              const right = (x + len - 1 < xmax);
+              console.log('up:' + up + ', down:' + down + ', left:' + left + ', right:' + right);
+                // look in all possible directions
+              if (up) {
+                // look up
+                if (input[y - 1][x] === xmas[1] && input[y - 2][x] === xmas[2] && input[y - 3][x] === xmas[3]) {
+                  count++;
+                }
+                if (left) {
+                  // look up+left
+                  if (input[y - 1][x - 1] === xmas[1] && input[y - 2][x - 2] === xmas[2] && input[y - 3][x - 3] === xmas[3]) {
+                    count++;
+                  }
+                }
+                if (right) {
+                  // look up+right
+                  if (input[y - 1][x + 1] === xmas[1] && input[y - 2][x + 2] === xmas[2] && input[y - 3][x + 3] === xmas[3]) {
+                    count++;
+                  }
+                }
+              }
+              if (left) {
+                // look left
+                if (input[y][x - 1] === xmas[1] && input[y][x - 2] === xmas[2] && input[y][x - 3] === xmas[3]) {
+                  count++;
+                }
+              }
+              if (right) {
+                // look right
+                if (input[y][x + 1] === xmas[1] && input[y][x + 2] === xmas[2] && input[y][x + 3] === xmas[3]) {
+                  count++;
+                }
+              }
+              if (down) {
+                // look down
+                if (input[y + 1][x] === xmas[1] && input[y + 2][x] === xmas[2] && input[y + 3][x] === xmas[3]) {
+                  count++;
+                }
+                if (left) {
+                  // look down+left
+                  if (input[y + 1][x - 1] === xmas[1] && input[y + 2][x - 2] === xmas[2] && input[y + 3][x - 3] === xmas[3]) {
+                    count++;
+                  }
+                }
+                if (right) {
+                  // look down+right
+                  if (input[y + 1][x + 1] === xmas[1] && input[y + 2][x + 2] === xmas[2] && input[y + 3][x + 3] === xmas[3]) {
+                    count++;
+                  }
+                }
+              }
+            }
+          }
+        }
+        return count;
+      },
       part2: d => d
     },
     day5: {
