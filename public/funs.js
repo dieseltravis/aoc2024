@@ -235,7 +235,43 @@
         }
         return count;
       },
-      part2: d => d
+      part2: (data) => {
+        const input = data.trim().split('\n').map(r => r.split(''));
+        const ymax = input.length;
+        const xmax = input[0].length;
+        console.log(input, ymax, xmax);
+        let count = 0;
+        for (let y = ymax; y--;) {
+          const row = input[y];
+          for (let x = xmax; x--;) {
+            const c = row[x];
+            console.log(y, x, c);
+            if (c === 'A') {
+              const up = (y >= 1);
+              const down = (y + 1 < ymax);
+              const left = (x >= 1);
+              const right = (x + 1 < xmax);
+              console.log('up:' + up + ', down:' + down + ', left:' + left + ', right:' + right);
+              // look in diagonals
+              if (up && down && left && right) {
+                // down right
+                const dr = (input[y - 1][x - 1] === 'M' && input[y + 1][x + 1] === 'S');
+                // down left
+                const dl = (input[y - 1][x + 1] === 'M' && input[y + 1][x - 1] === 'S');
+                // up right
+                const ur = (input[y + 1][x - 1] === 'M' && input[y - 1][x + 1] === 'S');
+                // up left
+                const ul = (input[y + 1][x + 1] === 'M' && input[y - 1][x - 1] === 'S');
+                // if any 2, then X
+                if (dr + dl + ur + ul === 2) {
+                  count++;
+                }
+              }
+            }
+          }
+        }
+        return count;
+      }
     },
     day5: {
       part1: d => d,
