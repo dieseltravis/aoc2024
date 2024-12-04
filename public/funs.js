@@ -181,7 +181,7 @@
               const left = (x >= len - 1);
               const right = (x + len - 1 < xmax);
               console.log('up:' + up + ', down:' + down + ', left:' + left + ', right:' + right);
-                // look in all possible directions
+              // look in all possible directions
               if (up) {
                 // look up
                 if (input[y - 1][x] === xmas[1] && input[y - 2][x] === xmas[2] && input[y - 3][x] === xmas[3]) {
