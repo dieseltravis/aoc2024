@@ -136,7 +136,13 @@
       }
     },
     day3: {
-      part1: d => d,
+      part1: (data) => {
+        const rxmul = /mul\((-?\d+),(-?\d+)\)/g;
+        const input = [...data.trim().matchAll(rxmul)];
+        console.log(input);
+        const sum = input.reduce((acc, r) => acc + r[1] * r[2], 0);
+        return sum;
+      },
       part2: d => d
     },
     day4: {
