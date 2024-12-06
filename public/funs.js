@@ -344,7 +344,60 @@
       }
     },
     day6: {
-      part1: d => d,
+      part1: (data) => {
+        const guard = {
+          '^': { dy: -1, dx: 0 },
+          '>': { dy: 0, dx: 1 },
+          v: { dy: 1, dx: 0 },
+          '<': { dy: 0, dx: -1 }
+        };
+        const dirs = Object.keys(guard);
+        let guardpos = { y: -1, x: -1 };
+        let guardchar = 'x';
+        let guardrotation = -1;
+        const input = data.trim().split('\n').map((r, y) => {
+          const row = r.split('');
+          const found = row.findIndex(c => dirs.includes(c));
+          if (found >= 0) {
+            guardpos = { y, x: found };
+            guardchar = row[found];
+            guardrotation = dirs.indexOf(guardchar);
+          }
+          return row;
+        });
+        const ymax = input.length;
+        const xmax = input[0].length;
+        const inRange = p => p.y >= 0 && p.y < ymax && p.x >= 0 && p.x < xmax;
+
+        console.log(dirs, guardpos, guardchar, guardrotation, ymax, xmax, input);
+        let safety = 10000;
+        let steps = 0;
+        while (safety--) {
+          input[guardpos.y][guardpos.x] = 'X';
+          let change = guard[guardchar];
+          let nextpos = { y: guardpos.y + change.dy, x: guardpos.x + change.dx };
+          let safety2 = 5;
+          if (!inRange(nextpos)) {
+            break;
+          }
+          while (input[nextpos.y][nextpos.x] === '#' && safety2--) {
+            // rotate right
+            guardrotation = (guardrotation + 1) % 4;
+            guardchar = dirs[guardrotation];
+            change = guard[guardchar];
+            nextpos = { y: guardpos.y + change.dy, x: guardpos.x + change.dx };
+            if (!inRange(nextpos)) {
+              break;
+            }
+          }
+          guardpos = nextpos;
+          steps++;
+        }
+        const grid = input.map(r => r.join('')).join('\n');
+        const count = grid.match(/X/g).length;
+        console.log(safety, steps, '\n' + grid, count);
+        return count;
+      },
       part2: d => d
     },
     day7: {
