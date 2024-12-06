@@ -277,8 +277,6 @@
       part1: (data) => {
         const input = data.trim().split('\n\n');
         const topList = input[0].split('\n').map(r => r.split('|'));
-        const before = new Set(topList.map(r => r[0]));
-        const after = new Set(topList.map(r => r[1]));
         const ordering = topList.reduce((acc, r) => {
           if (!acc[r[0]]) {
             acc[r[0]] = new Set();
@@ -286,9 +284,11 @@
           acc[r[0]].add(r[1]);
           return acc;
         }, {});
+        /*
+        const before = new Set(topList.map(r => r[0]));
+        const after = new Set(topList.map(r => r[1]));
         const first = before.difference(after);
         const last = after.difference(before);
-        /*
         const getAfter = (start) => {
           const descend = ordering[start];
           console.log(start, descend, !!descend);
@@ -312,7 +312,7 @@
         }, {});
         */
         const updates = input[1].split('\n').map(r => r.split(','));
-        //console.log(topList, before, after, first, last, ordering, updates);
+        // console.log(topList, before, after, first, last, ordering, updates);
         const sum = updates.reduce((acc, r) => {
           const len = r.length;
           let inOrder = true;
