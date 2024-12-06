@@ -284,35 +284,7 @@
           acc[r[0]].add(r[1]);
           return acc;
         }, {});
-        /*
-        const before = new Set(topList.map(r => r[0]));
-        const after = new Set(topList.map(r => r[1]));
-        const first = before.difference(after);
-        const last = after.difference(before);
-        const getAfter = (start) => {
-          const descend = ordering[start];
-          console.log(start, descend, !!descend);
-          let all = new Set();
-          if (descend) {
-            console.log(descend.size);
-            descend.forEach(p => {
-              console.log('adding', p);
-              all.add(p);
-              const add = getAfter(p);
-              all = all.union(add);
-              console.log('added', p, add, all);
-            });
-          }
-          return all;
-        };
-        const extrap = [...before].reduce((acc, p) => {
-          console.log('getting for p:' + p);
-          acc[p] = getAfter(p);
-          return acc;
-        }, {});
-        */
         const updates = input[1].split('\n').map(r => r.split(','));
-        // console.log(topList, before, after, first, last, ordering, updates);
         const sum = updates.reduce((acc, r) => {
           const len = r.length;
           let inOrder = true;
@@ -332,7 +304,44 @@
         }, 0);
         return sum;
       },
-      part2: d => d
+      part2: (data) => {
+        const input = data.trim().split('\n\n');
+        const topList = input[0].split('\n').map(r => r.split('|'));
+        const ordering = topList.reduce((acc, r) => {
+          if (!acc[r[0]]) {
+            acc[r[0]] = new Set();
+          }
+          acc[r[0]].add(r[1]);
+          return acc;
+        }, {});
+        const updates = input[1].split('\n').map(r => r.split(','));
+        const sum = updates.reduce((acc, r) => {
+          const len = r.length;
+          let inOrder = true;
+          let lastSet = ordering[r[0]];
+          for (let i = 1; i < len; i++) {
+            inOrder = inOrder && lastSet && lastSet.has(r[i]);
+            if (!inOrder) {
+              break;
+            }
+            lastSet = ordering[r[i]];
+          }
+          if (!inOrder) {
+            // sort
+            const sorted = r.sort((a, b) => {
+              const aa = ordering[a];
+              if (aa && aa.has(b)) {
+                return -1;
+              }
+              return 1;
+            });
+            const mid = Math.floor(len / 2);
+            acc += +sorted[mid];
+          }
+          return acc;
+        }, 0);
+        return sum;
+      }
     },
     day6: {
       part1: d => d,
