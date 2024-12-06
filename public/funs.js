@@ -274,8 +274,74 @@
       }
     },
     day5: {
-      part1: d => d,
-      part2: d => d
+      part1: (data) => {
+        const input = data.trim().split('\n\n');
+        const topList = input[0].split('\n').map(r => r.split('|'));
+        const ordering = topList.reduce((acc, r) => {
+          if (!acc[r[0]]) {
+            acc[r[0]] = new Set();
+          }
+          acc[r[0]].add(r[1]);
+          return acc;
+        }, {});
+        const updates = input[1].split('\n').map(r => r.split(','));
+        const sum = updates.reduce((acc, r) => {
+          const len = r.length;
+          let inOrder = true;
+          let lastSet = ordering[r[0]];
+          for (let i = 1; i < len; i++) {
+            inOrder = inOrder && lastSet && lastSet.has(r[i]);
+            if (!inOrder) {
+              break;
+            }
+            lastSet = ordering[r[i]];
+          }
+          if (inOrder) {
+            const mid = Math.floor(len / 2);
+            acc += +r[mid];
+          }
+          return acc;
+        }, 0);
+        return sum;
+      },
+      part2: (data) => {
+        const input = data.trim().split('\n\n');
+        const topList = input[0].split('\n').map(r => r.split('|'));
+        const ordering = topList.reduce((acc, r) => {
+          if (!acc[r[0]]) {
+            acc[r[0]] = new Set();
+          }
+          acc[r[0]].add(r[1]);
+          return acc;
+        }, {});
+        const updates = input[1].split('\n').map(r => r.split(','));
+        const sum = updates.reduce((acc, r) => {
+          const len = r.length;
+          let inOrder = true;
+          let lastSet = ordering[r[0]];
+          for (let i = 1; i < len; i++) {
+            inOrder = inOrder && lastSet && lastSet.has(r[i]);
+            if (!inOrder) {
+              break;
+            }
+            lastSet = ordering[r[i]];
+          }
+          if (!inOrder) {
+            // sort
+            const sorted = r.sort((a, b) => {
+              const aa = ordering[a];
+              if (aa && aa.has(b)) {
+                return -1;
+              }
+              return 1;
+            });
+            const mid = Math.floor(len / 2);
+            acc += +sorted[mid];
+          }
+          return acc;
+        }, 0);
+        return sum;
+      }
     },
     day6: {
       part1: d => d,
