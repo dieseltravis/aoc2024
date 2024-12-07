@@ -447,17 +447,22 @@
             }
           }
           // look right for repeating
-          const lookrrotate = (guardrotation + 1) % 4;
-          const lookrchar = dirs[lookrrotate];
-          // const oppositechar = dirs[(guardrotation + 3) % 4];
-          const lookrchange = guard[lookrchar];
+          let lookrrotate = (guardrotation + 1) % 4;
+          let lookrchar = dirs[lookrrotate];
+          let lookrchange = guard[lookrchar];
           let lookrpos = { y: guardpos.y + lookrchange.dy, x: guardpos.x + lookrchange.dx };
           let safety3 = 1000;
-          while (safety3-- && inRange(lookrpos) && input[lookrpos.y][lookrpos.x] !== '#') {
-            // TODO: continue bouncing off of obsticles and looking for loop
+          while (safety3-- && inRange(lookrpos)) {
             if (input[lookrpos.y][lookrpos.x] === lookrchar) {
               count++;
               break;
+            }
+            // TODO: continue bouncing off of obsticles and looking for loop
+            let safety4 = 5;
+            while (input[lookrpos.y][lookrpos.x] === '#' && safety4--) {
+              lookrrotate = (lookrrotate + 1) % 4;
+              lookrchar = dirs[lookrrotate];
+              lookrchange = guard[lookrchar];
             }
             lookrpos = { y: lookrpos.y + lookrchange.dy, x: lookrpos.x + lookrchange.dx };
           }
@@ -467,6 +472,7 @@
         const grid = input.map(r => r.join('')).join('\n');
         console.log(safety, steps, '\n' + grid, count);
         // 508 too low
+        // 1631 too low
         return count;
       }
     },
