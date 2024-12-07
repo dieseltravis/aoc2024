@@ -457,7 +457,7 @@
               count++;
               break;
             }
-            // TODO: continue bouncing off of obsticles and looking for loop
+            // continue bouncing off of obstacles and looking for loop
             let safety4 = 5;
             while (input[lookrpos.y][lookrpos.x] === '#' && safety4--) {
               lookrrotate = (lookrrotate + 1) % 4;
