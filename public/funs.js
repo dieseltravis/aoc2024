@@ -593,8 +593,109 @@
       }
     },
     day8: {
-      part1: d => d,
-      part2: d => d
+      part1: (data) => {
+        const ants = {};
+        const output = [];
+        const input = data.trim().split('\n').map((r, y) => {
+          const row = r.split('');
+          const o = [];
+          row.forEach((c, x) => {
+            if (c !== '.') {
+              ants[c] = ants[c] || [];
+              ants[c].push({ y, x });
+            }
+            o.push('.');
+          });
+          output.push(o);
+          return row;
+        });
+        const ymax = input.length;
+        const xmax = input[0].length;
+        const inRange = p => p.y >= 0 && p.y < ymax && p.x >= 0 && p.x < xmax;
+        console.log(ants, input, ymax, xmax);
+        const anti = [];
+        Object.keys(ants).forEach(a => {
+          console.log('antenna ' + a);
+          const aa = ants[a];
+          const len = aa.length;
+          aa.forEach((p1, i) => {
+            // compare each remaining points
+            for (let j = i + 1; j < len; j++) {
+              const p2 = aa[j];
+              const dy = p2.y - p1.y;
+              const dx = p2.x - p1.x;
+              const anti1 = { a, y: p1.y - dy, x: p1.x - dx };
+              const anti2 = { a, y: p2.y + dy, x: p2.x + dx };
+              if (inRange(anti1)) {
+                anti.push(anti1);
+                output[anti1.y][anti1.x] = '#';
+              }
+              if (inRange(anti2)) {
+                anti.push(anti2);
+                output[anti2.y][anti2.x] = '#';
+              }
+            }
+          });
+        });
+        const mapped = output.map(r => r.join('')).join('\n');
+        console.log('antinodes:\n' + mapped);
+        return mapped.match(/#/g).length;
+      },
+      part2: (data) => {
+        const ants = {};
+        const output = [];
+        const input = data.trim().split('\n').map((r, y) => {
+          const row = r.split('');
+          const o = [];
+          row.forEach((c, x) => {
+            if (c !== '.') {
+              ants[c] = ants[c] || [];
+              ants[c].push({ y, x });
+            }
+            o.push('.');
+          });
+          output.push(o);
+          return row;
+        });
+        const ymax = input.length;
+        const xmax = input[0].length;
+        const inRange = p => p.y >= 0 && p.y < ymax && p.x >= 0 && p.x < xmax;
+        console.log(ants, input, ymax, xmax);
+        const anti = [];
+        Object.keys(ants).forEach(a => {
+          console.log('antenna ' + a);
+          const aa = ants[a];
+          const len = aa.length;
+          if (len > 1) {
+            aa.forEach((p1, i) => {
+              output[p1.y][p1.x] = '#';
+              // compare each remaining points
+              for (let j = i + 1; j < len; j++) {
+                const p2 = aa[j];
+                const dy = p2.y - p1.y;
+                const dx = p2.x - p1.x;
+                let anti1 = { a, y: p1.y - dy, x: p1.x - dx };
+                let anti2 = { a, y: p2.y + dy, x: p2.x + dx };
+                while (inRange(anti1)) {
+                  anti.push(anti1);
+                  output[anti1.y][anti1.x] = '#';
+                  anti1 = { a, y: anti1.y - dy, x: anti1.x - dx };
+                }
+                while (inRange(anti2)) {
+                  anti.push(anti2);
+                  output[anti2.y][anti2.x] = '#';
+                  anti2 = { a, y: anti2.y + dy, x: anti2.x + dx };
+                }
+              }
+            });
+          }
+        });
+        const mapped = output.map(r => r.join('')).join('\n');
+        console.log(anti.length, 'antinodes:\n' + mapped);
+        // 1042 is too low
+        // 1230 is too high
+        return mapped.match(/#/g).length;
+      }
     },
     day9: {
       part1: d => d,
