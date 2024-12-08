@@ -447,7 +447,7 @@
               break;
             }
           }
-          
+
           guardpos = nextpos;
           route.push({
             char: guardchar,
@@ -459,8 +459,7 @@
         console.log(route);
 
         const rlen = route.length;
-        for (let i = 0; i < rlen; i++)
-        {
+        for (let i = 0; i < rlen; i++) {
           const point = route[i];
           guardpos = { y: point.y, x: point.x };
           guardchar = point.char;
@@ -476,13 +475,13 @@
               count++;
               break;
             }
-            // continue bouncing off of obstacles and looking for loop
-            //let safety6 = 5;
-            //while (input[lookrpos.y][lookrpos.x] === '#' && safety6--) {
-            //  lookrrotate = (lookrrotate + 1) % 4;
-            //  lookrchar = dirs[lookrrotate];
-             // lookrchange = guard[lookrchar];
-            //}
+            // continue bouncing off of obstacles and looking for loop?
+            let safety6 = 5;
+            while (input[lookrpos.y][lookrpos.x] === '#' && safety6--) {
+              lookrrotate = (lookrrotate + 1) % 4;
+              lookrchar = dirs[lookrrotate];
+              lookrchange = guard[lookrchar];
+            }
             lookrpos = { y: lookrpos.y + lookrchange.dy, x: lookrpos.x + lookrchange.dx };
           }
         }
