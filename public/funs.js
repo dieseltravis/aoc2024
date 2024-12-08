@@ -477,8 +477,73 @@
       }
     },
     day7: {
-      part1: d => d,
-      part2: d => d
+      part1: (data) => {
+        const input = data.trim().split('\n').map(r => {
+          const row = r.split(':').map(p => p.trim());
+          return {
+            key: +row[0],
+            vals: row[1].split(' ').map(Number)
+          };
+        });
+        console.log(input);
+        const ops = [
+          (a, b) => a + b,
+          (a, b) => a * b
+        ];
+        const good = [];
+        for (let l = input.length; l--;) {
+          const key = input[l].key;
+          const vals = input[l].vals;
+          const valen = vals.length;
+          for (let dec = Math.pow(2, valen - 1); dec--;) {
+            const bin = dec.toString(2).padStart(valen - 1, '0').split('').map(Number);
+            let test = vals[0];
+            for (let i = 1; i < valen; i++) {
+              test = ops[bin[i - 1]](test, vals[i]);
+            }
+            if (key === test) {
+              good.push(key);
+              break;
+            }
+          }
+        }
+        const sum = good.reduce((acc, n) => acc + n, 0);
+        return sum;
+      },
+      part2: (data) => {
+        const input = data.trim().split('\n').map(r => {
+          const row = r.split(':').map(p => p.trim());
+          return {
+            key: +row[0],
+            vals: row[1].split(' ').map(Number)
+          };
+        });
+        console.log(input);
+        const ops = [
+          (a, b) => a + b,
+          (a, b) => a * b,
+          (a, b) => +(a + '' + b)
+        ];
+        const good = [];
+        for (let l = input.length; l--;) {
+          const key = input[l].key;
+          const vals = input[l].vals;
+          const valen = vals.length;
+          for (let dec = Math.pow(3, valen - 1); dec--;) {
+            const bin = dec.toString(3).padStart(valen - 1, '0').split('').map(Number);
+            let test = vals[0];
+            for (let i = 1; i < valen; i++) {
+              test = ops[bin[i - 1]](test, vals[i]);
+            }
+            if (key === test) {
+              good.push(key);
+              break;
+            }
+          }
+        }
+        const sum = good.reduce((acc, n) => acc + n, 0);
+        return sum;
+      }
     },
     day8: {
       part1: d => d,
