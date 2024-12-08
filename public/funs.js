@@ -426,6 +426,7 @@
         console.log(dirs, guardpos, guardchar, guardrotation, ymax, xmax, input);
         let safety = 10000;
         let steps = 0;
+        const route = [];
         let count = 0;
         while (safety--) {
           // console.log(guardpos.y, guardpos.x, guardchar);
@@ -446,29 +447,46 @@
               break;
             }
           }
+          
+          guardpos = nextpos;
+          route.push({
+            char: guardchar,
+            y: guardpos.y,
+            x: guardpos.x
+          });
+          steps++;
+        }
+        console.log(route);
+
+        const rlen = route.length;
+        for (let i = 0; i < rlen; i++)
+        {
+          const point = route[i];
+          guardpos = { y: point.y, x: point.x };
+          guardchar = point.char;
+          guardrotation = dirs.indexOf(guardchar);
           // look right for repeating
           let lookrrotate = (guardrotation + 1) % 4;
           let lookrchar = dirs[lookrrotate];
           let lookrchange = guard[lookrchar];
           let lookrpos = { y: guardpos.y + lookrchange.dy, x: guardpos.x + lookrchange.dx };
-          let safety3 = 1000;
-          while (safety3-- && inRange(lookrpos)) {
+          let safety5 = 1000;
+          while (safety5-- && inRange(lookrpos)) {
             if (input[lookrpos.y][lookrpos.x] === lookrchar) {
               count++;
               break;
             }
             // continue bouncing off of obstacles and looking for loop
-            let safety4 = 5;
-            while (input[lookrpos.y][lookrpos.x] === '#' && safety4--) {
-              lookrrotate = (lookrrotate + 1) % 4;
-              lookrchar = dirs[lookrrotate];
-              lookrchange = guard[lookrchar];
-            }
+            //let safety6 = 5;
+            //while (input[lookrpos.y][lookrpos.x] === '#' && safety6--) {
+            //  lookrrotate = (lookrrotate + 1) % 4;
+            //  lookrchar = dirs[lookrrotate];
+             // lookrchange = guard[lookrchar];
+            //}
             lookrpos = { y: lookrpos.y + lookrchange.dy, x: lookrpos.x + lookrchange.dx };
           }
-          guardpos = nextpos;
-          steps++;
         }
+
         const grid = input.map(r => r.join('')).join('\n');
         console.log(safety, steps, '\n' + grid, count);
         // 508 too low
