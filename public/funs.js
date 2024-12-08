@@ -450,7 +450,7 @@
               const dx = p2.x - p1.x;
               const anti1 = { a, y: p1.y - dy, x: p1.x - dx };
               const anti2 = { a, y: p2.y + dy, x: p2.x + dx };
-              while (inRange(anti1)) {
+              if (inRange(anti1)) {
                 anti.push(anti1);
                 output[anti1.y][anti1.x] = '#';
               }
