@@ -428,6 +428,7 @@
         let steps = 0;
         const route = [];
         let count = 0;
+        const blocks = [];
         while (safety--) {
           // console.log(guardpos.y, guardpos.x, guardchar);
           input[guardpos.y][guardpos.x] = guardchar;
@@ -448,27 +449,6 @@
             }
           }
 
-          // look right for repeating
-          let lookrrotate = (guardrotation + 1) % 4;
-          let lookrchar = dirs[lookrrotate];
-          let lookrchange = guard[lookrchar];
-          let lookrpos = { y: guardpos.y + lookrchange.dy, x: guardpos.x + lookrchange.dx };
-          let safety3 = 1000;
-          while (safety3-- && inRange(lookrpos)) {
-            if (route.some(p => p.y === lookrpos.y && p.x === lookrpos.x && p.char === lookrchar)) {
-              count++;
-              break;
-            }
-            // TODO: continue bouncing off of obstacles and looking for loop
-            let safety4 = 5;
-            while (input[lookrpos.y][lookrpos.x] === '#' && safety4--) {
-              lookrrotate = (lookrrotate + 1) % 4;
-              lookrchar = dirs[lookrrotate];
-              lookrchange = guard[lookrchar];
-            }
-            lookrpos = { y: lookrpos.y + lookrchange.dy, x: lookrpos.x + lookrchange.dx };
-          }
-
           guardpos = nextpos;
           route.push({
             char: guardchar,
@@ -476,6 +456,44 @@
             y: guardpos.y,
             x: guardpos.x
           });
+
+          // look right for repeating
+          const lookloop = [];
+          let lookrrotate = (guardrotation + 1) % 4;
+          let lookrchar = dirs[lookrrotate];
+          let lookrchange = guard[lookrchar];
+          let lookrpos = { y: guardpos.y, x: guardpos.x };
+          let lookrnextpos = { y: lookrpos.y + lookrchange.dy, x: lookrpos.x + lookrchange.dx };
+          let safety4 = 1000;
+          while (inRange(lookrnextpos) && inRange(lookrpos) && safety4-- > 0) {
+            let safety3 = 4;
+            while (input[lookrnextpos.y][lookrnextpos.x] === '#' && safety3-- > 0) {
+              lookrrotate = (lookrrotate + 1) % 4;
+              lookrchar = dirs[lookrrotate];
+              lookrchange = guard[lookrchar];
+              lookrnextpos = { y: lookrpos.y + lookrchange.dy, x: lookrpos.x + lookrchange.dx };
+              console.log(safety3, lookrchar, lookrrotate, lookrnextpos.y, lookrnextpos.x);
+              if (!inRange(lookrnextpos)) {
+                break;
+              }
+            }
+            if (safety3 <= 0) {
+              console.log('safety3');
+            }
+            lookrpos = lookrnextpos;
+            if (route.some(p => p.y === lookrpos.y && p.x === lookrpos.x && p.char === lookrchar) || lookloop.some(p => p.y === lookrpos.y && p.x === lookrpos.x && p.char === lookrchar)) {
+              const dd = guard[guardchar];
+              const o = { y: guardpos.y + dd.dy, x: guardpos.x + dd.dx };
+              count++;
+              blocks.push(o);
+              break;
+            }
+            lookloop.push(lookrpos);
+            // continue bouncing off of obstacles and looking for loop
+          }
+          if (safety4 <= 0) {
+            console.log('safety4', { y: guardpos.y, x: guardpos.x });
+          }
           steps++;
         }
         console.log(route);
@@ -515,6 +533,7 @@
         }
         */
 
+        blocks.forEach(p => { input[p.y][p.x] = 'O'; });
         const grid = input.map(r => r.join('')).join('\n');
         console.log(safety, steps, '\n' + grid, count);
         // 508 too low
