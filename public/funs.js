@@ -522,8 +522,133 @@
       }
     },
     day9: {
-      part1: d => d,
-      part2: d => d
+      part1: (data) => {
+        let fileNum = 0;
+        const files = [];
+        const input = data.trim().split('').map((c, i) => {
+          const block = {
+            startIndex: i,
+            isSpace: i % 2,
+            size: +c
+          };
+          if (!block.isSpace) {
+            block.fileIndex = fileNum++;
+            files.push(block);
+          }
+          return block;
+        });
+        console.log(input, files);
+        const disk = input.reduce((acc, b) => {
+          for (let l = b.size; l--;) {
+            acc.push(b.isSpace ? '.' : b.fileIndex);
+          }
+          return acc;
+        }, []);
+        console.log(disk, disk.join(''));
+        for (let l = disk.length; l--;) {
+          const c = disk[l];
+          if (c !== '.') {
+            const free = disk.indexOf('.');
+            if (free < l) {
+              disk[l] = '.';
+              disk[free] = c;
+            } else {
+              break;
+            }
+          }
+        }
+        console.log(disk, disk.join(''));
+        const checksum = disk.reduce((sum, c, i) => {
+          if (c !== '.') {
+            sum += (i * c);
+          }
+          return sum;
+        }, 0);
+        return checksum;
+      },
+      part2: (data) => {
+        let fileNum = 0;
+        const files = [];
+        const input = data.trim().split('').map((c, i) => {
+          const block = {
+            startIndex: i,
+            isSpace: i % 2,
+            size: +c
+          };
+          if (!block.isSpace) {
+            block.fileIndex = fileNum++;
+            files.push(block);
+          }
+          return block;
+        });
+        console.log(input, files);
+        const disk = input.reduce((acc, b) => {
+          for (let l = b.size; l--;) {
+            acc.push(b.isSpace ? '.' : b.fileIndex);
+          }
+          return acc;
+        }, []);
+        console.log(disk, disk.join(''));
+        const findFree = () => {
+          let freeIndex = -1;
+          let lastFreeStart = -1;
+          return disk.reduce((acc, c, i) => {
+            if (c === '.') {
+              if (lastFreeStart === -1) {
+                lastFreeStart = i;
+                acc.push({
+                  start: i,
+                  freeLength: 0
+                });
+                freeIndex++;
+              }
+              acc[freeIndex].freeLength++;
+            } else {
+              lastFreeStart = -1;
+            }
+            return acc;
+          }, []);
+        };
+        console.log(findFree());
+        for (let l = disk.length; l--;) {
+          const c = disk[l];
+          // console.log(l, c);
+          if (c !== '.') {
+            const file = files[c];
+            const free = findFree();
+            const firstFree = free.find(f => f.freeLength >= file.size);
+            // console.log(file, firstFree);
+            if (firstFree) {
+              let newStart = firstFree.start;
+              if (newStart < l) {
+                // move file
+                for (let ll = file.size; ll--;) {
+                  disk[newStart++] = c;
+                  disk[l--] = '.';
+                }
+                l++;
+              } else {
+                // console.log('space is to right, going from ' + l);
+                l -= (file.size - 1);
+                // console.log('to ' + l);
+              }
+            } else {
+              // console.log('no space, going from ' + l);
+              l -= (file.size - 1);
+              // console.log('to ' + l);
+            }
+          }
+        }
+        console.log(disk, disk.join(''));
+        const checksum = disk.reduce((sum, c, i) => {
+          if (c !== '.') {
+            sum += (i * c);
+          }
+          return sum;
+        }, 0);
+        // 6717067113048 is too high
+        return checksum;
+      }
     },
     day10: {
       part1: d => d,
