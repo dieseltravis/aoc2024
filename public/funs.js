@@ -344,8 +344,203 @@
       }
     },
     day6: {
-      part1: d => d,
-      part2: d => d
+      part1: (data) => {
+        const guard = {
+          '^': { dy: -1, dx: 0 },
+          '>': { dy: 0, dx: 1 },
+          v: { dy: 1, dx: 0 },
+          '<': { dy: 0, dx: -1 }
+        };
+        const dirs = Object.keys(guard);
+        let guardpos = { y: -1, x: -1 };
+        let guardchar = 'x';
+        let guardrotation = -1;
+        const input = data.trim().split('\n').map((r, y) => {
+          const row = r.split('');
+          const found = row.findIndex(c => dirs.includes(c));
+          if (found >= 0) {
+            guardpos = { y, x: found };
+            guardchar = row[found];
+            guardrotation = dirs.indexOf(guardchar);
+          }
+          return row;
+        });
+        const ymax = input.length;
+        const xmax = input[0].length;
+        const inRange = p => p.y >= 0 && p.y < ymax && p.x >= 0 && p.x < xmax;
+
+        console.log(dirs, guardpos, guardchar, guardrotation, ymax, xmax, input);
+        let safety = 10000;
+        let steps = 0;
+        while (safety--) {
+          input[guardpos.y][guardpos.x] = 'X';
+          let change = guard[guardchar];
+          let nextpos = { y: guardpos.y + change.dy, x: guardpos.x + change.dx };
+          let safety2 = 5;
+          if (!inRange(nextpos)) {
+            break;
+          }
+          while (input[nextpos.y][nextpos.x] === '#' && safety2--) {
+            // rotate right
+            guardrotation = (guardrotation + 1) % 4;
+            guardchar = dirs[guardrotation];
+            change = guard[guardchar];
+            nextpos = { y: guardpos.y + change.dy, x: guardpos.x + change.dx };
+            if (!inRange(nextpos)) {
+              break;
+            }
+          }
+          guardpos = nextpos;
+          steps++;
+        }
+        const grid = input.map(r => r.join('')).join('\n');
+        const count = grid.match(/X/g).length;
+        console.log(safety, steps, '\n' + grid, count);
+        return count;
+      },
+      part2: (data) => {
+        const guard = {
+          '^': { dy: -1, dx: 0 },
+          '>': { dy: 0, dx: 1 },
+          v: { dy: 1, dx: 0 },
+          '<': { dy: 0, dx: -1 }
+        };
+        const dirs = Object.keys(guard);
+        let guardpos = { y: -1, x: -1 };
+        let guardchar = 'x';
+        let guardrotation = -1;
+        const input = data.trim().split('\n').map((r, y) => {
+          const row = r.split('');
+          const found = row.findIndex(c => dirs.includes(c));
+          if (found >= 0) {
+            guardpos = { y, x: found };
+            guardchar = row[found];
+            guardrotation = dirs.indexOf(guardchar);
+          }
+          return row;
+        });
+        const ymax = input.length;
+        const xmax = input[0].length;
+        const inRange = p => p.y >= 0 && p.y < ymax && p.x >= 0 && p.x < xmax;
+
+        console.log(dirs, guardpos, guardchar, guardrotation, ymax, xmax, input);
+        let safety = 10000;
+        let steps = 0;
+        const route = [];
+        let count = 0;
+        const blocks = [];
+        while (safety--) {
+          // console.log(guardpos.y, guardpos.x, guardchar);
+          input[guardpos.y][guardpos.x] = guardchar;
+          let change = guard[guardchar];
+          let nextpos = { y: guardpos.y + change.dy, x: guardpos.x + change.dx };
+          let safety2 = 5;
+          if (!inRange(nextpos)) {
+            break;
+          }
+          while (input[nextpos.y][nextpos.x] === '#' && safety2--) {
+            // rotate right
+            guardrotation = (guardrotation + 1) % 4;
+            guardchar = dirs[guardrotation];
+            change = guard[guardchar];
+            nextpos = { y: guardpos.y + change.dy, x: guardpos.x + change.dx };
+            if (!inRange(nextpos)) {
+              break;
+            }
+          }
+
+          guardpos = nextpos;
+          route.push({
+            char: guardchar,
+            rot: dirs.indexOf(guardchar),
+            y: guardpos.y,
+            x: guardpos.x
+          });
+
+          // look right for repeating
+          const lookloop = [];
+          let lookrrotate = (guardrotation + 1) % 4;
+          let lookrchar = dirs[lookrrotate];
+          let lookrchange = guard[lookrchar];
+          let lookrpos = { y: guardpos.y, x: guardpos.x };
+          let lookrnextpos = { y: lookrpos.y + lookrchange.dy, x: lookrpos.x + lookrchange.dx };
+          let safety4 = 1000;
+          while (inRange(lookrnextpos) && inRange(lookrpos) && safety4-- > 0) {
+            let safety3 = 4;
+            while (input[lookrnextpos.y][lookrnextpos.x] === '#' && safety3-- > 0) {
+              lookrrotate = (lookrrotate + 1) % 4;
+              lookrchar = dirs[lookrrotate];
+              lookrchange = guard[lookrchar];
+              lookrnextpos = { y: lookrpos.y + lookrchange.dy, x: lookrpos.x + lookrchange.dx };
+              console.log(safety3, lookrchar, lookrrotate, lookrnextpos.y, lookrnextpos.x);
+              if (!inRange(lookrnextpos)) {
+                break;
+              }
+            }
+            if (safety3 <= 0) {
+              console.log('safety3');
+            }
+            lookrpos = lookrnextpos;
+            if (route.some(p => p.y === lookrpos.y && p.x === lookrpos.x && p.char === lookrchar) || lookloop.some(p => p.y === lookrpos.y && p.x === lookrpos.x && p.char === lookrchar)) {
+              const dd = guard[guardchar];
+              const o = { y: guardpos.y + dd.dy, x: guardpos.x + dd.dx };
+              count++;
+              blocks.push(o);
+              break;
+            }
+            lookloop.push(lookrpos);
+            // continue bouncing off of obstacles and looking for loop
+          }
+          if (safety4 <= 0) {
+            console.log('safety4', { y: guardpos.y, x: guardpos.x });
+          }
+          steps++;
+        }
+        console.log(route);
+
+        /*
+        const rlen = route.length;
+        for (let i = 1; i < rlen; i++) {
+          const point = route[i];
+          // look right for repeating
+          let lookrrotate = (point.rot + 1) % 4;
+          let lookrchar = dirs[lookrrotate];
+          let lookrchange = guard[lookrchar];
+          let lookrpos = { y: point.y + lookrchange.dy, x: point.x + lookrchange.dx };
+          if (inRange(lookrpos)) {
+            const dd = guard[point.char];
+            const o = { y: point.y + dd.dy, x: point.x + dd.dx };
+            if (inRange(o) && input[o.y][o.x] !== '#') {
+              let safety5 = 10000;
+              while (safety5-- && inRange(lookrpos)) {
+                // if (input[lookrpos.y][lookrpos.x] === lookrchar) {
+                if (route.some(p => p.y === lookrpos.y && p.x === lookrpos.x && p.char === lookrchar)) {
+                  input[o.y][o.x] = 'O';
+                  count++;
+                  break;
+                }
+                // continue bouncing off of obstacles and looking for loop?
+                let safety6 = 5;
+                while (input[lookrpos.y][lookrpos.x] === '#' && safety6--) {
+                  lookrrotate = (lookrrotate + 1) % 4;
+                  lookrchar = dirs[lookrrotate];
+                  lookrchange = guard[lookrchar];
+                }
+                lookrpos = { y: lookrpos.y + lookrchange.dy, x: lookrpos.x + lookrchange.dx };
+              }
+            }
+          }
+        }
+        */
+
+        blocks.forEach(p => { input[p.y][p.x] = 'O'; });
+        const grid = input.map(r => r.join('')).join('\n');
+        console.log(safety, steps, '\n' + grid, count);
+        // 508 too low
+        // 1631 too low
+        // 1632 too low
+        return count;
+      }
     },
     day7: {
       part1: (data) => {
