@@ -522,7 +522,50 @@
       }
     },
     day9: {
-      part1: d => d,
+      part1: (data) => {
+        let fileNum = 0;
+        const files = [];
+        const input = data.trim().split('').map((c, i) => {
+          const block = {
+            startIndex: i,
+            isSpace: i % 2,
+            size: +c
+          };
+          if (!block.isSpace) {
+            block.fileIndex = fileNum++;
+            files.push(block);
+          }
+          return block;
+        });
+        console.log(input, files);
+        const disk = input.reduce((acc, b) => {
+          for (let l = b.size; l--;) {
+            acc.push(b.isSpace ? '.' : b.fileIndex);
+          }
+          return acc;
+        }, []);
+        console.log(disk, disk.join(''));
+        for (let l = disk.length; l--;) {
+          const c = disk[l];
+          if (c !== '.') {
+            const free = disk.indexOf('.');
+            if (free < l) {
+              disk[l] = '.';
+              disk[free] = c;
+            } else {
+              break;
+            }
+          }
+        }
+        console.log(disk, disk.join(''));
+        const checksum = disk.reduce((sum, c, i) => {
+          if (c !== '.') {
+            sum += (i * c);
+          }
+          return sum;
+        }, 0);
+        return checksum;
+      },
       part2: d => d
     },
     day10: {
