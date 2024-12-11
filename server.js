@@ -1,3 +1,5 @@
+// when migrated to v20 use: node --env-file=.env
+require('dotenv').config();
 const fs = require('fs');
 const https = require('https');
 const path = require('path');

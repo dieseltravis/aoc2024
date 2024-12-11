@@ -7,13 +7,14 @@
   "main": "server.js",
   "scripts": {
     "test": "node --check server.js && semistandard && eslint server.js public/*.js",
-    "start": "node server.js"
+    "start": "node --watch server.js"
   },
   "engines": {
     "node": ">=18.20.5 || >=20.0.0 || >=22.0.0 || >=24.0.0"
   },
   "dependencies": {
     "connect-timeout": "^1.9.0",
+    "dotenv": "^16.4.7",
     "eslint": "^9.16.0",
     "express": "^5.0.1",
     "express-rate-limit": "^7.4.1",
