@@ -660,14 +660,17 @@
         input.forEach((r, y) => {
           r.forEach((c, x) => {
             if (c === 0) {
-              starts.push({c, y, x, s: 0 });
+              starts.push({c, y, x, s: 0, last: [] });
             }
           });
         });
         console.log(input, ymax, xmax, starts);
         const hike = (p, o) => {
           if (p.c === 9) {
-            starts[o].s++;
+            if (!starts[o].last.some(pp => p.y === pp.y && p.x === pp.x)) {
+              starts[o].s++;
+              starts[o].last.push(p);
+            }
             return;
           }
           const nextVal = p.c + 1;
