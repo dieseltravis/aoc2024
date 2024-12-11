@@ -660,7 +660,7 @@
         input.forEach((r, y) => {
           r.forEach((c, x) => {
             if (c === 0) {
-              starts.push({c, y, x, s: 0, last: [] });
+              starts.push({ c, y, x, s: 0, last: [] });
             }
           });
         });
@@ -694,7 +694,7 @@
         starts.forEach((p, i) => {
           hike(p, i);
         });
-        return starts.reduce((sum, p)  => sum + p.s, 0);
+        return starts.reduce((sum, p) => sum + p.s, 0);
       },
       part2: (data) => {
         const input = data.trim().split('\n').map(r => r.split('').map(Number));
@@ -705,7 +705,7 @@
         input.forEach((r, y) => {
           r.forEach((c, x) => {
             if (c === 0) {
-              starts.push({c, y, x, s: 0 });
+              starts.push({ c, y, x, s: 0 });
             }
           });
         });
@@ -736,7 +736,7 @@
         starts.forEach((p, i) => {
           hike(p, i);
         });
-        return starts.reduce((sum, p)  => sum + p.s, 0);
+        return starts.reduce((sum, p) => sum + p.s, 0);
       }
     },
     day11: {
