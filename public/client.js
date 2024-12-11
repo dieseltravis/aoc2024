@@ -5,6 +5,7 @@ const process = function (funs, day, part) {
   const input = document.getElementById('input' + part);
   const getInput = document.querySelector('#input' + part + ' + .get-input');
   const answer = document.getElementById('part' + part);
+  const clip = document.getElementById('clip' + part);
   const button = document.getElementById('button' + part);
 
   getInput.addEventListener('click', async (ev) => {
@@ -24,6 +25,7 @@ const process = function (funs, day, part) {
 
       // fun time
       answer.innerText = funs(day, part)(input.value);
+      clip.style.display = 'inline-block';
 
       console.timeEnd(timer);
       html.classList.remove('wait');
@@ -32,6 +34,10 @@ const process = function (funs, day, part) {
   };
 
   button.addEventListener('click', onevent);
+  clip.addEventListener('click', function (ev) {
+    ev.preventDefault();
+    navigator.clipboard.writeText(answer.innerText);
+  });
 };
 
 const day = function (funs, day) {
