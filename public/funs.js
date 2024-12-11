@@ -696,7 +696,48 @@
         });
         return starts.reduce((sum, p)  => sum + p.s, 0);
       },
-      part2: d => d
+      part2: (data) => {
+        const input = data.trim().split('\n').map(r => r.split('').map(Number));
+        const ymax = input.length;
+        const xmax = input[0].length;
+        const inRange = p => p.y >= 0 && p.y < ymax && p.x >= 0 && p.x < xmax;
+        const starts = [];
+        input.forEach((r, y) => {
+          r.forEach((c, x) => {
+            if (c === 0) {
+              starts.push({c, y, x, s: 0 });
+            }
+          });
+        });
+        console.log(input, ymax, xmax, starts);
+        const hike = (p, o) => {
+          if (p.c === 9) {
+            starts[o].s++;
+            return;
+          }
+          const nextVal = p.c + 1;
+          const n = { y: p.y - 1, x: p.x, c: nextVal };
+          const e = { y: p.y, x: p.x + 1, c: nextVal };
+          const s = { y: p.y + 1, x: p.x, c: nextVal };
+          const w = { y: p.y, x: p.x - 1, c: nextVal };
+          if (inRange(n) && input[n.y][n.x] === nextVal) {
+            hike(n, o);
+          }
+          if (inRange(e) && input[e.y][e.x] === nextVal) {
+            hike(e, o);
+          }
+          if (inRange(s) && input[s.y][s.x] === nextVal) {
+            hike(s, o);
+          }
+          if (inRange(w) && input[w.y][w.x] === nextVal) {
+            hike(w, o);
+          }
+        };
+        starts.forEach((p, i) => {
+          hike(p, i);
+        });
+        return starts.reduce((sum, p)  => sum + p.s, 0);
+      }
     },
     day11: {
       part1: d => d,
