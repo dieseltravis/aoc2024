@@ -769,7 +769,37 @@
         console.log(newVals);
         return newVals.length;
       },
-      part2: d => d
+      part2: (data) => {
+        const input = data.trim().split(' ').map(Number); // .map(n => n.split('').map(Number));
+        const ymax = input.length;
+        console.log(input, ymax);
+        const process = n => {
+          if (n === 0) {
+            return [1];
+          } else {
+            const sn = n + '';
+            if (sn.length % 2 === 0) {
+              const half = sn.length / 2;
+              const arr = sn.split('');
+              return [+arr.slice(0, half).join(''), +arr.slice(-half).join('')];
+            } else {
+              return [n * 2024];
+            }
+          }
+        };
+        let newVals = input;
+        for (let i = 1; i <= 75; i++) {
+          console.time('part 2.' + i);
+          newVals = newVals.reduce((acc, n) => {
+            acc.push(...process(n));
+            return acc;
+          }, []);
+          console.timeEnd('part 2.' + i);
+          console.log(i, newVals.slice().length);
+        }
+        //  console.log(newVals);
+        return newVals.length;
+      }
     },
     day12: {
       part1: d => d,
