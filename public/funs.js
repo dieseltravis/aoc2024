@@ -881,7 +881,116 @@
         }, 0);
         return price;
       },
-      part2: d => d
+      part2: (data) => {
+        const input = data.trim().split('\n').map(r => r.split(''));
+        const ymax = input.length;
+        const xmax = input[0].length;
+        const inRange = p => p.y >= 0 && p.y < ymax && p.x >= 0 && p.x < xmax;
+        const max = ymax * xmax;
+        const shapes = input.reduce((acc, r, y) => {
+          r.forEach((c, x) => {
+            const point = {
+              c,
+              y,
+              x,
+              f: { /* n: 0, e: 0, s: 0, w: 0 */ }
+            };
+            const dirs = [
+              { d: 'n', y: y - 1, x },
+              { d: 'e', y, x: x + 1 },
+              { d: 's', y: y + 1, x },
+              { d: 'w', y, x: x - 1 }
+            ];
+            dirs.forEach(dir => {
+              if (inRange(dir) && input[dir.y][dir.x] === c) {
+                point.f[dir.d] = false;
+              } else {
+                point.f[dir.d] = true;
+              }
+            });
+            acc[y + ',' + x] = point;
+          });
+          return acc;
+        }, {});
+        console.log(input, ymax, xmax, max, shapes);
+        const look = (p, skip) => {
+          skip.push(p);
+          const dirs = [
+            { d: 'n', y: p.y - 1, x: p.x },
+            { d: 'e', y: p.y, x: p.x + 1 },
+            { d: 's', y: p.y + 1, x: p.x },
+            { d: 'w', y: p.y, x: p.x - 1 }
+          ];
+          dirs.forEach(dir => {
+            if (inRange(dir) && input[dir.y][dir.x] === p.c && !skip.some(s => s.y === dir.y && s.x === dir.x)) {
+              look(shapes[dir.y + ',' + dir.x], skip);
+            }
+          });
+          return skip;
+        };
+        const found = [];
+        const processed = [];
+        Object.keys(shapes).forEach(k => {
+          if (!processed.includes(k)) {
+            const shapePoints = look(shapes[k], []);
+            found.push(shapePoints);
+            processed.push(...shapePoints.map(p => p.y + ',' + p.x));
+          }
+        });
+        console.log(found, processed);
+        const price = found.reduce((acc, region) => {
+          const area = region.length;
+          let sides = 0;
+          let ncount = 0;
+          let scount = 0;
+          for (let y = 0; y < ymax; y++) {
+            let xnlast = -2;
+            let xslast = -2;
+            for (let x = 0; x < xmax; x++) {
+              // count N && S sides
+              const found = region.find(p => p.y === y && p.x === x);
+              if (found && found.f.n) {
+                if (x - xnlast >= 2) {
+                  ncount++;
+                }
+                xnlast = x;
+              }
+              if (found && found.f.s) {
+                if (x - xslast >= 2) {
+                  scount++;
+                }
+                xslast = x;
+              }
+            }
+          }
+          sides += ncount + scount;
+          let ecount = 0;
+          let wcount = 0;
+          for (let x = 0; x < xmax; x++) {
+            let yelast = -2;
+            let ywlast = -2;
+            for (let y = 0; y < ymax; y++) {
+              // count E && W sides
+              const found = region.find(p => p.y === y && p.x === x);
+              if (found && found.f.e) {
+                if (y - yelast >= 2) {
+                  ecount++;
+                }
+                yelast = y;
+              }
+              if (found && found.f.w) {
+                if (y - ywlast >= 2) {
+                  wcount++;
+                }
+                ywlast = y;
+              }
+            }
+          }
+          sides += ecount + wcount;
+          return acc + (area * sides);
+        }, 0);
+        return price;
+      }
     },
     day13: {
       part1: d => d,
