@@ -741,7 +741,7 @@
     },
     day11: {
       part1: (data) => {
-        const input = data.trim().split(' ').map(Number); // .map(n => n.split('').map(Number));
+        const input = data.trim().split(' ').map(Number);
         const ymax = input.length;
         console.log(input, ymax);
         const process = n => {
@@ -764,15 +764,20 @@
             acc.push(...process(n));
             return acc;
           }, []);
-          // console.log(l, newVals.slice());
         }
         console.log(newVals);
         return newVals.length;
       },
       part2: (data) => {
-        const input = data.trim().split(' ').map(Number); // .map(n => n.split('').map(Number));
-        const ymax = input.length;
-        console.log(input, ymax);
+        let input = data.trim().split(' ').map(Number).reduce((acc, n) => {
+          if (!acc[n]) {
+            acc[n] = 1;
+          } else {
+            acc[n]++;
+          }
+          return acc;
+        }, {});
+        console.log(input);
         const process = n => {
           if (n === 0) {
             return [1];
@@ -787,18 +792,28 @@
             }
           }
         };
-        let newVals = input;
         for (let i = 1; i <= 75; i++) {
-          console.time('part 2.' + i);
-          newVals = newVals.reduce((acc, n) => {
-            acc.push(...process(n));
-            return acc;
-          }, []);
-          console.timeEnd('part 2.' + i);
-          console.log(i, newVals.slice().length);
+          console.time('part 2, ' + i);
+          const newInput = {};
+          Object.keys(input).forEach(k => {
+            const val = input[k];
+            if (val) {
+              const processed = process(+k);
+              processed.forEach(n => {
+                if (!newInput[n]) {
+                  newInput[n] = val;
+                } else {
+                  newInput[n] += val;
+                }
+              });
+            }
+          });
+          input = newInput;
+          // console.log(Object.keys(input).filter(k => input[k] > 0));
+          console.timeEnd('part 2, ' + i);
         }
-        //  console.log(newVals);
-        return newVals.length;
+        const sum = Object.keys(input).filter(k => input[k] > 0).reduce((acc, n) => acc + input[n], 0);
+        return sum;
       }
     },
     day12: {
