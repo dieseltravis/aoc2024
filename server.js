@@ -218,6 +218,7 @@ fs.readFile(path.join(__dirname, 'views/stats.ntl'), function (err, content) {
 
 // listen for requests :)
 const listener = app.listen(process.env.PORT, function () {
+  console.log(new Date());
   console.log('This cool app is listening on port ' + listener.address().port);
   const PROJECT_URL = isGlitch ? `https://${process.env.PROJECT_DOMAIN}.glitch.me/` : `http://localhost:${listener.address().port}/`;
   console.log(PROJECT_URL);
