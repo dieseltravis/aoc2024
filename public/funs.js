@@ -740,8 +740,81 @@
       }
     },
     day11: {
-      part1: d => d,
-      part2: d => d
+      part1: (data) => {
+        const input = data.trim().split(' ').map(Number);
+        const ymax = input.length;
+        console.log(input, ymax);
+        const process = n => {
+          if (n === 0) {
+            return [1];
+          } else {
+            const sn = n + '';
+            if (sn.length % 2 === 0) {
+              const half = sn.length / 2;
+              const arr = sn.split('');
+              return [+arr.slice(0, half).join(''), +arr.slice(-half).join('')];
+            } else {
+              return [n * 2024];
+            }
+          }
+        };
+        let newVals = input;
+        for (let l = 25; l--;) {
+          newVals = newVals.reduce((acc, n) => {
+            acc.push(...process(n));
+            return acc;
+          }, []);
+        }
+        console.log(newVals);
+        return newVals.length;
+      },
+      part2: (data) => {
+        let input = data.trim().split(' ').map(Number).reduce((acc, n) => {
+          if (!acc[n]) {
+            acc[n] = 1;
+          } else {
+            acc[n]++;
+          }
+          return acc;
+        }, {});
+        console.log(input);
+        const process = n => {
+          if (n === 0) {
+            return [1];
+          } else {
+            const sn = n + '';
+            if (sn.length % 2 === 0) {
+              const half = sn.length / 2;
+              const arr = sn.split('');
+              return [+arr.slice(0, half).join(''), +arr.slice(-half).join('')];
+            } else {
+              return [n * 2024];
+            }
+          }
+        };
+        for (let i = 1; i <= 75; i++) {
+          console.time('part 2, ' + i);
+          const newInput = {};
+          Object.keys(input).forEach(k => {
+            const val = input[k];
+            if (val) {
+              const processed = process(+k);
+              processed.forEach(n => {
+                if (!newInput[n]) {
+                  newInput[n] = val;
+                } else {
+                  newInput[n] += val;
+                }
+              });
+            }
+          });
+          input = newInput;
+          // console.log(Object.keys(input).filter(k => input[k] > 0));
+          console.timeEnd('part 2, ' + i);
+        }
+        const sum = Object.keys(input).filter(k => input[k] > 0).reduce((acc, n) => acc + input[n], 0);
+        return sum;
+      }
     },
     day12: {
       part1: d => d,
