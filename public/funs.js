@@ -817,7 +817,70 @@
       }
     },
     day12: {
-      part1: d => d,
+      part1: (data) => {
+        const input = data.trim().split('\n').map(r => r.split(''));
+        const ymax = input.length;
+        const xmax = input[0].length;
+        const inRange = p => p.y >= 0 && p.y < ymax && p.x >= 0 && p.x < xmax;
+        const max = ymax * xmax;
+        const shapes = input.reduce((acc, r, y) => {
+          r.forEach((c, x) => {
+            const point = {
+              c,
+              y,
+              x,
+              f: { /* n: 0, e: 0, s: 0, w: 0 */ }
+            };
+            const dirs = [
+              { d: 'n', y: y - 1, x },
+              { d: 'e', y, x: x + 1 },
+              { d: 's', y: y + 1, x },
+              { d: 'w', y, x: x - 1 }
+            ];
+            dirs.forEach(dir => {
+              if (inRange(dir) && input[dir.y][dir.x] === c) {
+                point.f[dir.d] = false;
+              } else {
+                point.f[dir.d] = true;
+              }
+            });
+            acc[y + ',' + x] = point;
+          });
+          return acc;
+        }, {});
+        console.log(input, ymax, xmax, max, shapes);
+        const look = (p, skip) => {
+          skip.push(p);
+          const dirs = [
+            { d: 'n', y: p.y - 1, x: p.x },
+            { d: 'e', y: p.y, x: p.x + 1 },
+            { d: 's', y: p.y + 1, x: p.x },
+            { d: 'w', y: p.y, x: p.x - 1 }
+          ];
+          dirs.forEach(dir => {
+            if (inRange(dir) && input[dir.y][dir.x] === p.c && !skip.some(s => s.y === dir.y && s.x === dir.x)) {
+              look(shapes[dir.y + ',' + dir.x], skip);
+            }
+          });
+          return skip;
+        };
+        const found = [];
+        const processed = [];
+        Object.keys(shapes).forEach(k => {
+          if (!processed.includes(k)) {
+            const shapePoints = look(shapes[k], []);
+            found.push(shapePoints);
+            processed.push(...shapePoints.map(p => p.y + ',' + p.x));
+          }
+        });
+        console.log(found, processed);
+        const price = found.reduce((acc, region) => {
+          const area = region.length;
+          const fence = region.reduce((acc2, p) => acc2 + p.f.n + p.f.e + p.f.s + p.f.w, 0);
+          return acc + (area * fence);
+        }, 0);
+        return price;
+      },
       part2: d => d
     },
     day13: {
