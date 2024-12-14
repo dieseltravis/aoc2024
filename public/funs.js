@@ -1050,7 +1050,6 @@
       part2: (data) => {
         const matchButtons = /X\+(\d+), Y\+(\d+)/;
         const matchPrize = /X=(\d+), Y=(\d+)/;
-        let sum = 0;
         const input = data.trim().split('\n\n').map(r => {
           const claw = r.split('\n');
           const buttonA = claw[0].match(matchButtons);
@@ -1070,10 +1069,17 @@
               y: +prize[2] + 10000000000000
             }
           };
+          return game;
+        });
+        const ymax = input.length;
+        console.log(input, ymax);
+        const sum = input.reduce((acc, game, i) => {
           // start at max B value
-          const bmax = Math.min(game.p.x / game.b.x, game.p.y / game.b.y);
+          const bmax = Math.floor(Math.min(game.p.x / game.b.x, game.p.y / game.b.y)) + 1;
           const percentage = bmax / 100;
+          let last = bmax;
           let percent = 100;
+          console.log('processing ' + (i + 1) + ' of ' + ymax + ', counting down from ' + bmax);
           for (let b = bmax; b--;) {
             const bx = b * game.b.x;
             if (bx <= game.p.x) {
@@ -1091,21 +1097,22 @@
                       game.p.b = b;
                       game.p.a = axv;
                       game.p.t = (axv * 3) + b;
-                      sum += game.p.t;
+                      acc += game.p.t;
+                      console.log(acc, game.p.t);
                       break;
                     }
                   }
                 }
               }
             }
-            if (b < percent * percentage) {
+            if (b < last) {
               console.log((100 - percent) + '%');
+              last -= percentage;
               percent--;
             }
           }
-          return game;
-        });
-        console.log(input, sum);
+          return acc;
+        }, 0);
         return sum;
       }
     },
