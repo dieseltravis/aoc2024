@@ -993,7 +993,60 @@
       }
     },
     day13: {
-      part1: d => d,
+      part1: (data) => {
+        const matchButtons = /X\+(\d+), Y\+(\d+)/;
+        const matchPrize = /X=(\d+), Y=(\d+)/;
+        let sum = 0;
+        const input = data.trim().split('\n\n').map(r => {
+          const claw = r.split('\n');
+          const buttonA = claw[0].match(matchButtons);
+          const buttonB = claw[1].match(matchButtons);
+          const prize = claw[2].match(matchPrize);
+          const game = {
+            a: {
+              x: +buttonA[1],
+              y: +buttonA[2]
+            },
+            b: {
+              x: +buttonB[1],
+              y: +buttonB[2]
+            },
+            p: {
+              x: +prize[1],
+              y: +prize[2]
+            }
+          };
+          // start at max B value
+          for (let b = 100; b--;) {
+            const bx = b * game.b.x;
+            if (bx <= game.p.x) {
+              const by = b * game.b.y;
+              if (by <= game.p.y) {
+                // remainder after B value
+                const rx = game.p.x - bx;
+                if (rx % game.a.x === 0) {
+                  const ry = game.p.y - by;
+                  if (ry % game.a.y === 0) {
+                    // check A values are equal
+                    const axv = rx / game.a.x;
+                    const ayv = ry / game.a.y;
+                    if (axv === ayv) {
+                      game.p.b = b;
+                      game.p.a = axv;
+                      game.p.t = (axv * 3) + b;
+                      sum += game.p.t;
+                      break;
+                    }
+                  }
+                }
+              }
+            }
+          }
+          return game;
+        });
+        console.log(input, sum);
+        return sum;
+      },
       part2: d => d
     },
     day14: {
