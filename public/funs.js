@@ -1050,8 +1050,8 @@
       part2: (data) => {
         const matchButtons = /X\+(\d+), Y\+(\d+)/;
         const matchPrize = /X=(\d+), Y=(\d+)/;
-        const input = data.trim().split('\n\n').map(r => {
-          const claw = r.split('\n');
+        const input = data.trim().split(/\r?\n\r?\n/).map(r => {
+          const claw = r.split(/\r?\n/);
           const buttonA = claw[0].match(matchButtons);
           const buttonB = claw[1].match(matchButtons);
           const prize = claw[2].match(matchPrize);
@@ -1117,7 +1117,83 @@
       }
     },
     day14: {
-      part1: d => d,
+      part1: (data) => {
+        const matchpv = /p=(-?\d+),(-?\d+) v=(-?\d+),(-?\d+)/;
+        const input = data.trim().split(/\r?\n/).map(r => {
+          const m = r.match(matchpv);
+          return {
+            p: { x: +m[1], y: +m[2] },
+            v: { x: +m[3], y: +m[4] }
+          };
+        });
+        const ymax = 103;
+        const xmax = 101;
+        const space = [];
+        for (let y = ymax; y--;) {
+          const row = [];
+          for (let x = xmax; x--;) {
+            row.push('.');
+          }
+          space.push(row);
+        }
+        console.log(input, space);
+        const move = (s) => {
+          const sx = s.p.x;
+          const sy = s.p.y;
+          const dx = s.v.x;
+          const dy = s.v.y;
+          let nx = sx + dx;
+          if (nx >= xmax) {
+            nx = nx % xmax;
+          } else if (nx < 0) {
+            nx = xmax + (nx % xmax);
+          }
+          let ny = sy + dy;
+          if (ny >= ymax) {
+            ny = ny % ymax;
+          } else if (ny < 0) {
+            ny = ymax + (ny % ymax);
+          }
+          s.p.x = nx;
+          s.p.y = ny;
+          return s;
+        };
+        for (let ll = input.length; ll--;) {
+          let robot = input[ll];
+          for (let l = 100; l--;) {
+            robot = move(robot);
+            input[ll] = robot;
+          }
+          if (space[robot.p.y][robot.p.x] === '.') {
+            space[robot.p.y][robot.p.x] = 1;
+          } else {
+            space[robot.p.y][robot.p.x]++;
+          }
+        }
+        console.log(space.map(r => r.join('')).join('\n'));
+        const halfx = Math.floor(xmax / 2);
+        const upperhalfx = xmax - halfx;
+        const halfy = Math.floor(ymax / 2);
+        const upperhalfy = ymax - halfy;
+        const quads = input.reduce((acc, r) => {
+          if (r.p.x < halfx && r.p.y < halfy) {
+            acc[0]++;
+          }
+          if (r.p.x >= upperhalfx && r.p.y < halfy) {
+            acc[1]++;
+          }
+          if (r.p.x < halfx && r.p.y >= upperhalfy) {
+            acc[2]++;
+          }
+          if (r.p.x >= upperhalfx && r.p.y >= upperhalfy) {
+            acc[3]++;
+          }
+          return acc;
+        }, [0, 0, 0, 0]);
+        console.log(quads);
+        const safety = quads.reduce((acc, f) => acc * f, 1);
+        return safety;
+      },
       part2: d => d
     },
     day15: {
