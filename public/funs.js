@@ -1170,7 +1170,7 @@
             space[robot.p.y][robot.p.x]++;
           }
         }
-        console.log(space.map(r => r.join('')).join('\n'));
+        console.log('\n' + space.map(r => r.join('')).join('\n'));
         const halfx = Math.floor(xmax / 2);
         const upperhalfx = xmax - halfx;
         const halfy = Math.floor(ymax / 2);
@@ -1194,7 +1194,67 @@
         const safety = quads.reduce((acc, f) => acc * f, 1);
         return safety;
       },
-      part2: d => d
+      part2: (data) => {
+        const matchpv = /p=(-?\d+),(-?\d+) v=(-?\d+),(-?\d+)/;
+        const input = data.trim().split(/\r?\n/).map(r => {
+          const m = r.match(matchpv);
+          return {
+            p: { x: +m[1], y: +m[2] },
+            v: { x: +m[3], y: +m[4] }
+          };
+        });
+        const ymax = 103;
+        const xmax = 101;
+        console.log(input);
+        const move = (s) => {
+          const sx = s.p.x;
+          const sy = s.p.y;
+          const dx = s.v.x;
+          const dy = s.v.y;
+          let nx = sx + dx;
+          if (nx >= xmax) {
+            nx = nx % xmax;
+          } else if (nx < 0) {
+            nx = xmax + (nx % xmax);
+          }
+          let ny = sy + dy;
+          if (ny >= ymax) {
+            ny = ny % ymax;
+          } else if (ny < 0) {
+            ny = ymax + (ny % ymax);
+          }
+          s.p.x = nx;
+          s.p.y = ny;
+          return s;
+        };
+        for (let cycles = 0; cycles < 10000; cycles++) {
+          const clone = JSON.parse(JSON.stringify(input));
+          const space = [];
+          for (let y = ymax; y--;) {
+            const row = [];
+            for (let x = xmax; x--;) {
+              row.push('.');
+            }
+            space.push(row);
+          }
+          for (let ll = clone.length; ll--;) {
+            let robot = clone[ll];
+            for (let l = cycles; l--;) {
+              robot = move(robot);
+              clone[ll] = robot;
+            }
+            if (space[robot.p.y][robot.p.x] === '.') {
+              space[robot.p.y][robot.p.x] = 1;
+            } else {
+              space[robot.p.y][robot.p.x]++;
+            }
+          }
+          if (new Set(space.map(r => r.join('')).join('')).size === 2) {
+            console.log(cycles + '\n' + space.map(r => r.join('')).join('\n'));
+          }
+        }
+        return 'look in console';
+      }
     },
     day15: {
       part1: d => d,
