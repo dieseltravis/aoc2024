@@ -1361,7 +1361,7 @@
           } else if (m === 'v') {
             yval = Math.max(...toMove.map(s => s.y));
           }
-          console.log('m', m, 'y', yval);
+          // console.log('m', m, 'y', yval);
           const end = toMove.filter(s => s.y === yval);
           let allEmpty = true;
           for (let l = end.length; l--;) {
@@ -1426,7 +1426,7 @@
                 const shape = shapes[l];
                 const char = map[shape.y][shape.x];
                 const moved = { y: shape.y + adjust.dy, x: shape.x + adjust.dx };
-                console.log(shape, char, moved);
+                // console.log(shape, char, moved);
                 map[moved.y][moved.x] = char;
                 map[shape.y][shape.x] = '.';
                 if (char === '@') {
@@ -1435,7 +1435,7 @@
               }
             }
           }
-          console.log('new start', start, '\n' + map.map(r => r.join('')).join('\n'));
+          // console.log('new start', start, '\n' + map.map(r => r.join('')).join('\n'));
         });
         const sum = map.reduce((acc, row, y) => {
           row.forEach((c, x) => {
