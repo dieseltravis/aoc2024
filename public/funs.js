@@ -1274,7 +1274,7 @@
           }
           return row;
         });
-        const moves = input[1].trim().replace(/\r?\n/, '').split('');
+        const moves = input[1].trim().replace(/\r|\n/g, '').split('');
         console.log(map, moves, start);
         const lookDir = (p, m) => {
           const adjust = dir[m];
