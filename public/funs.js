@@ -1257,7 +1257,71 @@
       }
     },
     day15: {
-      part1: d => d,
+      part1: (data) => {
+        const input = data.trim().split(/\r?\n\r?\n/);
+        const dir = {
+          '^': { dy: -1, dx: 0 },
+          '>': { dy: 0, dx: 1 },
+          v: { dy: 1, dx: 0 },
+          '<': { dy: 0, dx: -1 }
+        };
+        let start = { y: -1, x: -1 };
+        const map = input[0].trim().split(/\r?\n/).map((r, y) => {
+          const row = r.split('');
+          const x = row.indexOf('@');
+          if (x >= 0) {
+            start = { y, x };
+          }
+          return row;
+        });
+        const moves = input[1].trim().replace(/\r?\n/, '').split('');
+        console.log(map, moves, start);
+        const lookDir = (p, m) => {
+          const adjust = dir[m];
+          const lookPos = { adjust, y: p.y + adjust.dy, x: p.x + adjust.dx };
+          const lookChar = map[lookPos.y][lookPos.x];
+          if (lookChar === '.') {
+            return lookPos;
+          } else if (lookChar === '#') {
+            return false;
+          } else {
+            return lookDir(lookPos, m);
+          }
+        };
+        const movemax = moves.length;
+        console.log('start:\n' + map.map(r => r.join('')).join('\n'));
+        moves.forEach((m, i) => {
+          console.log('moving ' + m + ' ' + i + ' of ' + movemax, 'start', start);
+          const dot = lookDir(start, m);
+          if (dot) {
+            let last = { y: dot.y, x: dot.x };
+            console.log('shifting from', dot, 'to', start, last.x !== start.x, last.y !== start.y);
+            while (last.x !== start.x || last.y !== start.y) {
+              const next = { y: last.y - dot.adjust.dy, x: last.x - dot.adjust.dx };
+              map[last.y][last.x] = map[next.y][next.x];
+              console.log('last', last, 'next', next);
+              if (next.x !== start.x || next.y !== start.y) {
+                last = next;
+              } else {
+                break;
+              }
+            }
+            map[start.y][start.x] = '.';
+            start = last;
+          }
+          console.log('new start', start, '\n' + map.map(r => r.join('')).join('\n'));
+        });
+        const sum = map.reduce((acc, row, y) => {
+          row.forEach((c, x) => {
+            if (c === 'O') {
+              acc += (100 * y) + x;
+            }
+          });
+          return acc;
+        }, 0);
+        console.log('end:\n' + map.map(r => r.join('')).join('\n'));
+        return sum;
+      },
       part2: d => d
     },
     day16: {
