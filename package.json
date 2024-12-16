@@ -17,7 +17,7 @@
     "dotenv": "^16.4.7",
     "eslint": "^9.16.0",
     "express": "^5.0.1",
-    "express-rate-limit": "^7.4.1",
+    "express-rate-limit": "^7.5.0",
     "jshint": "^2.13.6",
     "semistandard": "^17.0.0",
     "standard-engine": "^15.1.0"
