@@ -1299,7 +1299,7 @@
             while (last.x !== start.x || last.y !== start.y) {
               const next = { y: last.y - dot.adjust.dy, x: last.x - dot.adjust.dx };
               map[last.y][last.x] = map[next.y][next.x];
-              console.log('last', last, 'next', next);
+              // console.log('last', last, 'next', next);
               if (next.x !== start.x || next.y !== start.y) {
                 last = next;
               } else {
@@ -1309,7 +1309,7 @@
             map[start.y][start.x] = '.';
             start = last;
           }
-          console.log('new start', start, '\n' + map.map(r => r.join('')).join('\n'));
+          // console.log('new start', start, '\n' + map.map(r => r.join('')).join('\n'));
         });
         const sum = map.reduce((acc, row, y) => {
           row.forEach((c, x) => {
