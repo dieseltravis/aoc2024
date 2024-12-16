@@ -1322,7 +1322,132 @@
         console.log('end:\n' + map.map(r => r.join('')).join('\n'));
         return sum;
       },
-      part2: d => d
+      part2: (data) => {
+        const input = data.trim().split(/\r?\n\r?\n/);
+        const dir = {
+          '^': { dy: -1, dx: 0 },
+          '>': { dy: 0, dx: 1 },
+          v: { dy: 1, dx: 0 },
+          '<': { dy: 0, dx: -1 }
+        };
+        let start = { y: -1, x: -1 };
+        const map = input[0].trim().replace(/#/g, '##').replace(/O/g, '[]').replace(/\./g, '..').replace(/@/g, '@.').split(/\r?\n/).map((r, y) => {
+          const row = r.split('');
+          const x = row.indexOf('@');
+          if (x >= 0) {
+            start = { y, x };
+          }
+          return row;
+        });
+        const moves = input[1].trim().replace(/\r|\n/g, '').split('');
+        console.log(map, moves, start);
+        const lookXDir = (p, m) => {
+          const adjust = dir[m];
+          const lookPos = { adjust, y: p.y + adjust.dy, x: p.x + adjust.dx };
+          const lookChar = map[lookPos.y][lookPos.x];
+          if (lookChar === '.') {
+            return lookPos;
+          } else if (lookChar === '#') {
+            return false;
+          } else {
+            return lookXDir(lookPos, m);
+          }
+        };
+        const lookYDir = (toMove, m) => {
+          const adjust = dir[m];
+          let yval = -1;
+          if (m === '^') {
+            yval = Math.min(...toMove.map(s => s.y));
+          } else if (m === 'v') {
+            yval = Math.max(...toMove.map(s => s.y));
+          }
+          console.log('m', m, 'y', yval);
+          const end = toMove.filter(s => s.y === yval);
+          let allEmpty = true;
+          for (let l = end.length; l--;) {
+            const s = end[l];
+            const look = { y: s.y + adjust.dy, x: s.x + adjust.dx };
+            if (!toMove.some(any => any.y === look.y && any.x === look.x)) {
+              const lookChar = map[look.y][look.x];
+              if (lookChar === '#') {
+                // a shape hit a wall, can't move
+                toMove = [];
+                allEmpty = false;
+                return false;
+              } else if (lookChar === '.') {
+                allEmpty = allEmpty && true;
+              } else if (lookChar === '[') {
+                allEmpty = false;
+                toMove.push(look);
+                toMove.push({ y: look.y, x: look.x + 1 });
+              } else if (lookChar === ']') {
+                allEmpty = false;
+                toMove.push(look);
+                toMove.push({ y: look.y, x: look.x - 1 });
+              }
+            }
+          }
+          if (allEmpty) {
+            return toMove;
+          } else {
+            return lookYDir(toMove, m);
+          }
+        };
+        const movemax = moves.length;
+        console.log('start:\n' + map.map(r => r.join('')).join('\n'));
+        moves.forEach((m, i) => {
+          console.log('moving ' + m + ' ' + i + ' of ' + movemax, 'start', start);
+          // moving horizontal is the same
+          if (m === '<' || m === '>') {
+            const dot = lookXDir(start, m);
+            if (dot) {
+              let last = { y: dot.y, x: dot.x };
+              console.log('shifting from', dot, 'to', start, last.x !== start.x, last.y !== start.y);
+              while (last.x !== start.x || last.y !== start.y) {
+                const next = { y: last.y - dot.adjust.dy, x: last.x - dot.adjust.dx };
+                map[last.y][last.x] = map[next.y][next.x];
+                // console.log('last', last, 'next', next);
+                if (next.x !== start.x || next.y !== start.y) {
+                  last = next;
+                } else {
+                  break;
+                }
+              }
+              map[start.y][start.x] = '.';
+              start = last;
+            }
+          } else if (m === '^' || m === 'v') {
+            // moving vertical is tricky
+            const adjust = dir[m];
+            const shapes = lookYDir([start], m);
+            console.log('shifting start:', start, 'shapes:', shapes);
+            if (shapes && shapes.length > 0) {
+              for (let l = shapes.length; l--;) {
+                const shape = shapes[l];
+                const char = map[shape.y][shape.x];
+                const moved = { y: shape.y + adjust.dy, x: shape.x + adjust.dx };
+                console.log(shape, char, moved);
+                map[moved.y][moved.x] = char;
+                map[shape.y][shape.x] = '.';
+                if (char === '@') {
+                  start = moved;
+                }
+              }
+            }
+          }
+          console.log('new start', start, '\n' + map.map(r => r.join('')).join('\n'));
+        });
+        const sum = map.reduce((acc, row, y) => {
+          row.forEach((c, x) => {
+            if (c === '[') {
+              acc += (100 * y) + x;
+            }
+          });
+          return acc;
+        }, 0);
+        console.log('end:\n' + map.map(r => r.join('')).join('\n'));
+        return sum;
+      }
     },
     day16: {
       part1: d => d,
