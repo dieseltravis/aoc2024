@@ -2021,7 +2021,44 @@
         console.log(result);
         return result.length;
       },
-      part2: d => d
+      part2: (data) => {
+        const input = data.split(/\r?\n/).map(r => r.split(',').map(Number));
+        const gridsize = 71;
+        const grid = [];
+        for (let y = gridsize; y--;) {
+          const row = [];
+          for (let x = gridsize; x--;) {
+            row.push(1);
+          }
+          grid.push(row);
+        }
+        console.log(input, grid);
+        const minsimulate = 1024;
+        const maxlen = input.length;
+        let block = [-1, -1];
+        for (let simulate = minsimulate; simulate < maxlen; simulate++) {
+          for (let i = simulate; i--;) {
+            const m = input[i];
+            // console.log(m);
+            grid[m[1]][m[0]] = 0;
+          }
+          // console.log(grid.map(r => r.map(c => c ? '.' : '#').join('')).join('\n'));
+          const as = astar();
+          const g = new as.Graph(grid);
+          const start = g.grid[0][0];
+          const end = g.grid[gridsize - 1][gridsize - 1];
+          // console.log(g, start, end);
+          const result = as.astar.search(g, start, end);
+          console.log(simulate, result.length);
+          if (result.length === 0) {
+            block = input[simulate - 1];
+            break;
+          }
+        }
+        console.log(block);
+        // not 57,32
+        return block.join(',');
+      }
     },
     day19: {
       part1: d => d,
