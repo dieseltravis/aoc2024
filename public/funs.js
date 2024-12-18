@@ -1454,8 +1454,162 @@
       part2: d => d
     },
     day17: {
-      part1: d => d,
-      part2: d => d
+      part1: (data) => {
+        const input = data.trim().split(/\r?\n\r?\n/);
+        const reg = input[0].split(/\r?\n/).map(r => +r.split(':')[1].trim());
+        const prog = input[1].split(' ')[1].split(',').map(Number);
+        console.log(input, reg, prog);
+        const combo = n => {
+          if (n >= 0 && n <= 3) {
+            return n;
+          } else if (n === 4) {
+            // A
+            return reg[0];
+          } else if (n === 5) {
+            // B
+            return reg[1];
+          } else if (n === 6) {
+            // C
+            return reg[2];
+          }
+        };
+        const output = [];
+        const op = (code, operand, point) => {
+          switch (code) {
+            case 0: // adv
+              reg[0] = Math.floor(reg[0] / Math.pow(2, combo(operand)));
+              break;
+            case 1: // bxl
+              reg[1] = reg[1] ^ operand;
+              break;
+            case 2: // bst
+              reg[1] = combo(operand) % 8;
+              break;
+            case 3: // jnz
+              if (reg[0] !== 0) {
+                if (point === operand) {
+                  point -= 2;
+                } else {
+                  point = operand - 2;
+                }
+              }
+              break;
+            case 4: // bxc
+              reg[1] = reg[1] ^ reg[2];
+              break;
+            case 5: // out
+              output.push(combo(operand) % 8);
+              break;
+            case 6: // bdv
+              reg[1] = reg[0] / Math.pow(2, combo(operand));
+              break;
+            case 7: // cdv
+              reg[2] = reg[0] / Math.pow(2, combo(operand));
+              break;
+          }
+          return point;
+        };
+        const len = prog.length;
+        let safety = 1000;
+        for (let i = 0; i < len; i += 2) {
+          // console.log(i, prog[i], prog[i + 1], reg.join(','), output.join(','));
+          i = op(prog[i], prog[i + 1], i);
+          if (safety-- <= 0) {
+            console.warn('safety hit!');
+            break;
+          }
+        }
+        console.log(output.join(','));
+        // not 3
+        return output.join(',');
+      },
+      part2: (data) => {
+        const input = data.trim().split(/\r?\n\r?\n/);
+        let reg = [0, 0, 0];
+        const prog = input[1].split(' ')[1].split(',').map(Number);
+        const start = prog.join(',');
+        console.log(input, reg, prog);
+        const combo = n => {
+          if (n >= 0 && n <= 3) {
+            return n;
+          } else if (n === 4) {
+            // A
+            return reg[0];
+          } else if (n === 5) {
+            // B
+            return reg[1];
+          } else if (n === 6) {
+            // C
+            return reg[2];
+          }
+        };
+        const op = (code, operand, point, output) => {
+          switch (code) {
+            case 0: // adv
+              reg[0] = Math.floor(reg[0] / Math.pow(2, combo(operand)));
+              break;
+            case 1: // bxl
+              reg[1] = reg[1] ^ operand;
+              break;
+            case 2: // bst
+              reg[1] = combo(operand) % 8;
+              break;
+            case 3: // jnz
+              if (reg[0] !== 0) {
+                if (point === operand) {
+                  point -= 2;
+                } else {
+                  point = operand - 2;
+                }
+              }
+              break;
+            case 4: // bxc
+              reg[1] = reg[1] ^ reg[2];
+              break;
+            case 5: // out
+              output.push(combo(operand) % 8);
+              break;
+            case 6: // bdv
+              reg[1] = reg[0] / Math.pow(2, combo(operand));
+              break;
+            case 7: // cdv
+              reg[2] = reg[0] / Math.pow(2, combo(operand));
+              break;
+          }
+          return point;
+        };
+        let result = -1;
+        const min = 5000000000;
+        const max = 10000000000;
+        const pct = (max - min) / 100;
+        let percent = 0;
+        let progress = min;
+        for (let iter = min; iter < max; iter++) {
+          reg = [iter, 0, 0];
+          const output = [];
+          const len = prog.length;
+          let safety = 1000;
+          for (let i = 0; i < len; i += 2) {
+            // console.log(i, prog[i], prog[i + 1], reg.join(','), output.join(','));
+            i = op(prog[i], prog[i + 1], i, output);
+            if (safety-- <= 0) {
+              console.warn('safety hit!');
+              break;
+            }
+          }
+          const end = output.join(',');
+          if (start === end) {
+            result = iter;
+            break;
+          }
+          if (iter > progress) {
+            console.log(percent + '%');
+            progress += pct;
+            percent++;
+          }
+        }
+        return result;
+      }
     },
     day18: {
       part1: d => d,
