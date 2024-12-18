@@ -1579,8 +1579,8 @@
           return point;
         };
         let result = -1;
-        const min = 500000000;
-        const max = 1000000000;
+        const min = 5000000000;
+        const max = 10000000000;
         const pct = (max - min) / 100;
         let percent = 0;
         let progress = min;
