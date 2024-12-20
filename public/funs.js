@@ -2,6 +2,7 @@
   'use strict';
 
   // MIT astar: https://github.com/bgrins/javascript-astar/blob/master/astar.js
+  // (modified to conform to semistandard)
   const astar = () => {
     // javascript-astar 0.4.1
     // http://github.com/bgrins/javascript-astar
@@ -380,7 +381,7 @@
     };
     return { astar, Graph };
   };
-    // end astar
+  // end astar
 
   const all = {
     day1: {
@@ -1960,8 +1961,8 @@
           return point;
         };
         let result = -1;
-        const min = 5000000000;
-        const max = 10000000000;
+        const min = 10000000000;
+        const max = 50000000000;
         const pct = (max - min) / 100;
         let percent = 0;
         let progress = min;
@@ -1994,7 +1995,7 @@
     },
     day18: {
       part1: (data) => {
-        const input = data.split(/\r?\n/).map(r => r.split(',').map(Number));
+        const input = data.trim().split(/\r?\n/).map(r => r.split(',').map(Number));
         const gridsize = 71;
         const grid = [];
         for (let y = gridsize; y--;) {
@@ -2022,7 +2023,7 @@
         return result.length;
       },
       part2: (data) => {
-        const input = data.split(/\r?\n/).map(r => r.split(',').map(Number));
+        const input = data.trim().split(/\r?\n/).map(r => r.split(',').map(Number));
         const gridsize = 71;
         const grid = [];
         for (let y = gridsize; y--;) {
@@ -2061,7 +2062,20 @@
       }
     },
     day19: {
-      part1: d => d,
+      part1: (data) => {
+        const input = data.trim().split(/\r?\n\r?\n/);
+        const patterns = new RegExp('^(' + input[0].split(',').sort((a, b) => b.length - a.length).map(s => s.trim()).join('|') + ')+$');
+        const designs = input[1].split(/\r?\n/);
+        console.log(patterns, designs);
+        let count = 0;
+        designs.forEach(d => {
+          if (patterns.test(d)) {
+            count++;
+          }
+        });
+        // not 25
+        return count;
+      },
       part2: d => d
     },
     day20: {
