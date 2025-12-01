@@ -1,3 +1,7 @@
+## Looking for aoc2025?
+
+Trying something new this year: [source.tube/travis/aoc2025](https://source.tube/travis/aoc2025)
+
 # aoc2024: Travis's Advent of Code 2024
 
 javascript 🎄 [Advent of Code](https://adventofcode.com/) 2024
