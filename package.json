@@ -15,7 +15,7 @@
   "dependencies": {
     "connect-timeout": "^1.9.1",
     "dotenv": "^17.2.3",
-    "eslint": "^9.39.1",
+    "eslint": "^9.39.2",
     "express": "^5.2.1",
     "express-rate-limit": "^8.2.1",
     "jshint": "^2.13.6",
