@@ -39,7 +39,7 @@
     "maintained node versions"
   ],
   "devDependencies": {
-    "@eslint/eslintrc": "^3.3.3",
+    "@eslint/eslintrc": "^3.3.4",
     "@eslint/js": "^10.0.1",
     "globals": "^17.3.0"
   }
