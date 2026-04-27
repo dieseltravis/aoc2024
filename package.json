@@ -10,7 +10,7 @@
     "start": "node --watch server.js"
   },
   "engines": {
-    "node": ">=18.20.5 || >=20.0.0 || >=22.0.0 || >=24.0.0"
+    "node": ">=22.0.0 || >=24.0.0"
   },
   "dependencies": {
     "connect-timeout": "^1.9.1",
