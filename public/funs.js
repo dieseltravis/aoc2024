@@ -1752,8 +1752,6 @@
               const lookChar = map[look.y][look.x];
               if (lookChar === '#') {
                 // a shape hit a wall, can't move
-                toMove = [];
-                allEmpty = false;
                 return false;
               } else if (lookChar === '.') {
                 allEmpty = allEmpty && true;
