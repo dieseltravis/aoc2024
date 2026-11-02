@@ -20,7 +20,7 @@
     "express-rate-limit": "^8.7.1",
     "jshint": "^0.5.9",
     "lodash": "^4.18.1",
-    "minimatch": "^10.2.6",
+    "minimatch": "^11.0.3",
     "semistandard": "^17.0.0",
     "standard-engine": "^15.1.0"
   },
